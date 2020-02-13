@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 //routes
-// import defaultRoutes from './default';
+import defaultRoutes from './default';
 // import horizontalRoutes from './horizontal';
 // import boxedRoutes from './boxed';
 // import mini from './mini';
@@ -22,7 +22,7 @@ Vue.use(Router)
 export default new Router({
 	mode: 'history',
 	routes: [
-		// defaultRoutes,
+		defaultRoutes,
 		// horizontalRoutes,
 		// boxedRoutes,
 		// mini,

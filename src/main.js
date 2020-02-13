@@ -1,5 +1,4 @@
 // src/main.js
-
 import 'babel-polyfill'
 import Vue from 'vue'
 import App from './App.vue'
@@ -22,16 +21,27 @@ import fullscreen from 'vue-fullscreen'
 import InstantSearch from 'vue-instantsearch'
 import VueVideoPlayer from 'vue-video-player';
 import Croppa from 'vue-croppa';
+
+//import interceptors
+import interceptor from './interceptors'
+
+//import axios global
+import './axios'
+
 // global components
 import GlobalComponents from './globalComponents'
+
 // router
 import router from './router'
 
 // store
-import { store } from './store/store';
+import { store } from './store/store'
+
+// constants
+import AppConfig from './constants/AppConfig'
 
 // firebase
-import './firebase'
+// import './firebase'
 
 // include all css files
 import './lib/VuelyCss'
@@ -47,9 +57,9 @@ router.beforeEach((to, from, next) => {
 	if (to.matched.some(record => record.meta.requiresAuth)) {
 		// this route requires auth, check if logged in
 		// if not, redirect to login page.
-		if (localStorage.getItem('user') === null) {
+		if (localStorage.getItem(AppConfig.userKey) === null) {
 			next({
-				path: '/session/login',
+				path: '/',
 				query: { redirect: to.fullPath }
 			})
 		} else {
@@ -108,10 +118,11 @@ const i18n = new VueI18n({
 
 
 new Vue({
-  store,
+	interceptor,
+	store,
 	i18n,
 	router,
-  vuetify,
-  render: h => h(App),
+	vuetify,
+	render: h => h(App),
 	components: { App }
 }).$mount('#app')

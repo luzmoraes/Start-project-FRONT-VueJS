@@ -2,123 +2,64 @@
  * Auth Module
  */
 import Vue from 'vue'
-import firebase from 'firebase/app';
+import axios from 'axios'
 import Nprogress from 'nprogress';
 import router from '../../../router';
-import {
-    facebookAuthProvider,
-    googleAuthProvider,
-    twitterAuthProvider,
-    githubAuthProvider
-} from '../../../firebase';
+import AppConfig from "../../../constants/AppConfig";
+import AuthService from "../../../auth/AuthService";
+
+const auth = new AuthService();
+const { setAccessToken, setRefreshToken, setCurrentUser, getCurrentUser } = auth
 
 const state = {
-    user: localStorage.getItem('user'),
-    isUserSigninWithAuth0: Boolean(localStorage.getItem('isUserSigninWithAuth0'))
+    user: getCurrentUser()
 }
 
 // getters
 const getters = {
     getUser: state => {
-        return state.user;
-    },
-    isUserSigninWithAuth0: state => {
-        return state.isUserSigninWithAuth0;
+        return state.user
     }
 }
 
 // actions
 const actions = {
-    signinUserInFirebase(context, payload) {
-        const { user } = payload;
-        context.commit('loginUser');
-        firebase.auth().signInWithEmailAndPassword(user.email, user.password)
-            .then(user => {
-                Nprogress.done();
-                setTimeout(() => {
-                    context.commit('loginUserSuccess', user);
-                }, 500)
+    signinUser(context, payload) {
+        context.commit('loginUser')
+        axios.post(`${AppConfig.baseUrl}oauth/token`, payload)
+            .then(res => {
+                if (res.data.access_token) {
+                    setAccessToken(res.data.access_token)
+                    setRefreshToken(res.data.refresh_token)
+                    context.dispatch("getCurrentUser");
+                } else {
+                    Nprogress.done()
+                    context.commit('loginUserFailure', {message: 'E-mail ou senha inválidos, tente novamente!'})
+                }
             })
-            .catch(error => {
-                context.commit('loginUserFailure', error);
-            });
-    },
-    logoutUserFromFirebase(context) {
-        Nprogress.start();
-        firebase.auth().signOut()
-            .then(() => {
-                Nprogress.done();
-                setTimeout(() => {
-                    context.commit('logoutUser');
-                }, 500)
-            })
-            .catch(error => {
-                context.commit('loginUserFailure', error);
+            .catch(err => {
+                // context.commit('loginUserFailure', err);
+                context.commit('loginUserFailure', {message: 'E-mail ou senha inválidos, tente novamente!'});
+                return err
             })
     },
-    signinUserWithFacebook(context) {
-        context.commit('loginUser');
-        firebase.auth().signInWithPopup(facebookAuthProvider).then((result) => {
-            Nprogress.done();
-            setTimeout(() => {
-                context.commit('loginUserSuccess', result.user);
-            }, 500)
-        }).catch(error => {
-            context.commit('loginUserFailure', error);
-        });
-    },
-    signinUserWithGoogle(context) {
-        context.commit('loginUser');
-        firebase.auth().signInWithPopup(googleAuthProvider).then((result) => {
-            Nprogress.done();
-            setTimeout(() => {
-                context.commit('loginUserSuccess', result.user);
-            }, 500)
-        }).catch(error => {
-            context.commit('loginUserFailure', error);
-        });
-    },
-    signinUserWithTwitter(context) {
-        context.commit('loginUser');
-        firebase.auth().signInWithPopup(twitterAuthProvider).then((result) => {
-            Nprogress.done();
-            setTimeout(() => {
-                context.commit('loginUserSuccess', result.user);
-            }, 500)
-        }).catch(error => {
-            context.commit('loginUserFailure', error);
-        });
-    },
-    signinUserWithGithub(context) {
-        context.commit('loginUser');
-        firebase.auth().signInWithPopup(githubAuthProvider).then((result) => {
-            Nprogress.done();
-            setTimeout(() => {
-                context.commit('loginUserSuccess', result.user);
-            }, 500)
-        }).catch(error => {
-            context.commit('loginUserFailure', error);
-        });
-    },
-    signupUserInFirebase(context, payload) {
-        let { userDetail } = payload;
-        context.commit('signUpUser');
-        firebase.auth().createUserWithEmailAndPassword(userDetail.email, userDetail.password)
-            .then(() => {
-                Nprogress.done();
-                setTimeout(() => {
-                    context.commit('signUpUserSuccess', userDetail);
-                }, 500)
+    getCurrentUser(context) {
+        axios.get(`${AppConfig.baseUrl}api/user/me`)
+            .then(res => {
+                Nprogress.done()
+                const user = {
+                    id: res.data.id,
+                    name: res.data.name,
+                    email: res.data.email,
+                    created_at: res.data.created_at
+                }
+                context.commit('loginUserSuccess', user)
             })
-            .catch(error => {
-                context.commit('signUpUserFailure', error);
+            .catch(err => {
+                // context.commit('loginUserFailure', err);
+                context.commit('loginUserFailure', {message: 'não buscou o usuário!'});
+                return err
             })
-    },
-    signInUserWithAuth0(context, payload) {
-        context.commit('signInUserWithAuth0Success', payload);
-    },
-    signOutUserFromAuth0(context) {
-        context.commit('signOutUserFromAuth0Success');
     }
 }
 
@@ -128,9 +69,8 @@ const mutations = {
         Nprogress.start();
     },
     loginUserSuccess(state, user) {
-        state.user = user;
-        localStorage.setItem('user',user);
-        state.isUserSigninWithAuth0 = false
+        state.user = user
+        setCurrentUser(user)
         router.push("/default/dashboard/ecommerce");
         setTimeout(function(){
             Vue.notify({
@@ -150,37 +90,13 @@ const mutations = {
     },
     logoutUser(state) {
         state.user = null
-        localStorage.removeItem('user');
-        router.push("/session/login");
+        localStorage.removeItem(AppConfig.userKey);
+        localStorage.removeItem(AppConfig.tokenKey);
+        localStorage.removeItem(AppConfig.refreshTokenKey);
+        router.push("/");
     },
     signUpUser() {
         Nprogress.start();
-    },
-    signUpUserSuccess(state, user) {
-        state.user = localStorage.setItem('user', user);
-        router.push("/default/dashboard/ecommerce");
-        Vue.notify({
-            group: 'loggedIn',
-            type: 'success',
-            text: 'Account Created!'
-        });
-    },
-    signUpUserFailure(state, error) {
-        Nprogress.done();
-         Vue.notify({
-            group: 'loggedIn',
-            type: 'error',
-            text: error.message
-        });
-    },
-    signInUserWithAuth0Success(state, user) {
-        state.user = user;
-        localStorage.setItem('user',JSON.stringify(user));
-        state.isUserSigninWithAuth0 = true;
-    },
-    signOutUserFromAuth0Success(state) {
-        state.user = null
-        localStorage.removeItem('user')
     }
 }
 
