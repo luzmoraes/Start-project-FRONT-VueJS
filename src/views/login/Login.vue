@@ -33,9 +33,7 @@
 						<router-link class="mb-2" to="/forgot-password">{{$t('message.forgotPassword')}}?</router-link>
 						<div>
 							<v-btn large @click="submit" block color="primary" class="mb-2">{{$t('message.loginNow')}}</v-btn>
-							<!-- <v-btn large @click="onCreateAccount" block color="warning" class="mb-2">{{$t('message.createAccount')}}</v-btn> -->
 						</div>
-						<!-- <p>{{$t('message.bySigningUpYouAgreeTo')}} {{brand}}</p> -->
 						<router-link to="">{{$t('message.termsOfService')}}</router-link>
 					</v-form>
 				</div>
@@ -72,25 +70,6 @@ export default {
       this.authInfo.password = this.password
       this.$store.dispatch("signinUser", this.authInfo);
     }
-    // ,
-    // signInWithFacebook() {
-    //   this.$store.dispatch("signinUserWithFacebook");
-    // },
-    // signInWithGoogle() {
-    //   this.$store.dispatch("signinUserWithGoogle");
-    // },
-    // signInWithTwitter() {
-    //   this.$store.dispatch("signinUserWithTwitter");
-    // },
-    // signInWithGithub() {
-    //   this.$store.dispatch("signinUserWithGithub");
-    // },
-    // onCreateAccount() {
-    //   this.$router.push("/session/sign-up");
-    // },
-    // signinWithAuth0() {
-    //   login();
-    // }
   }
 };
 </script>

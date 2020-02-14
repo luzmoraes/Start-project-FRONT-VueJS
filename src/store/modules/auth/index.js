@@ -57,7 +57,7 @@ const actions = {
             })
             .catch(err => {
                 // context.commit('loginUserFailure', err);
-                context.commit('loginUserFailure', {message: 'não buscou o usuário!'});
+                context.commit('loginUserFailure', {message: 'Dados do usuário não pode ser carregado, tente novamente!'});
                 return err
             })
     }
@@ -71,7 +71,7 @@ const mutations = {
     loginUserSuccess(state, user) {
         state.user = user
         setCurrentUser(user)
-        router.push("/default/dashboard/ecommerce");
+        router.push("/dashboard");
         setTimeout(function(){
             Vue.notify({
                 group: 'loggedIn',

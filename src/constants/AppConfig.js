@@ -11,7 +11,7 @@ export default {
 	authInfo: {
 		grant_type: "password",
 		client_id: 2,
-		client_secret: "pMJdqNHYrfMG5m1MDvcNzzddBu51dXhUpbieEKt9",
+		client_secret: "kEVTPt2AQsyQf23p8RRYFiknAUO8yyPbNGmmurMJ",
 		username: "",
 		password: "",
 		scope: ""

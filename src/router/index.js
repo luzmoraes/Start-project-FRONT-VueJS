@@ -1,44 +1,15 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-//routes
-import defaultRoutes from './default';
-// import horizontalRoutes from './horizontal';
-// import boxedRoutes from './boxed';
-// import mini from './mini';
-// import boxedV2 from './boxed-v2';
-
-// session components
-// const SignUpOne = () => import('Views/session/SignUpOne');
-const Login = () => import('Views/session/Login');
-// const LockScreen = () => import('Views/session/LockScreen');
-const ForgotPassword = () => import('Views/session/ForgotPassword');
-// const ResetPassword = () => import('Views/session/ResetPassword');
-
-// const Auth0CallBack = () => import('Components/Auth0Callback/Auth0Callback');
+const Login = () => import('Views/login/Login');
+const ForgotPassword = () => import('Views/login/ForgotPassword');
+const Dashboard = () => import('Views/dashboard/Dashboard')
 
 Vue.use(Router)
 
 export default new Router({
 	mode: 'history',
 	routes: [
-		defaultRoutes,
-		// horizontalRoutes,
-		// boxedRoutes,
-		// mini,
-		// boxedV2,
-		// {
-		// 	path: '/callback',
-		// 	component: Auth0CallBack
-		// },
-		// {
-		// 	path: '/session/sign-up',
-		// 	component: SignUpOne,
-		// 	meta: {
-		// 		title: 'message.signUp',
-		// 		breadcrumb: null
-		// 	}
-		// },
 		{
 			path: '/',
 			component: Login,
@@ -47,14 +18,6 @@ export default new Router({
 				breadcrumb: null
 			}
 		},
-		// {
-		// 	path: '/session/lock-screen',
-		// 	component: LockScreen,
-		// 	meta: {
-		// 		title: 'Lock Screen',
-		// 		breadcrumb: null
-		// 	}
-		// },
 		{
 			path: '/forgot-password',
 			component: ForgotPassword,
@@ -63,13 +26,18 @@ export default new Router({
 				breadcrumb: null
 			}
 		},
-		// {
-		// 	path: '/session/reset-password',
-		// 	component: ResetPassword,
-		// 	meta: {
-		// 		title: 'message.resetPassword',
-		// 		breadcrumb: null
-		// 	}
-		// }
+		{
+			path: '/dashboard',
+			component: Dashboard,
+			meta: {
+				requiresAuth: true,
+				title: 'message.ecommerce',
+				breadcrumb: null
+			}
+		},
+		{ 
+			path: '*',
+			redirect: '/'
+		}
 	]
 })
