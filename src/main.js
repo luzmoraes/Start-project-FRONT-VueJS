@@ -22,9 +22,6 @@ import InstantSearch from 'vue-instantsearch'
 import VueVideoPlayer from 'vue-video-player';
 import Croppa from 'vue-croppa';
 
-//import interceptors
-import interceptor from './interceptors'
-
 //import axios global
 import './axios'
 
@@ -118,7 +115,6 @@ const i18n = new VueI18n({
 
 
 new Vue({
-	interceptor,
 	store,
 	i18n,
 	router,

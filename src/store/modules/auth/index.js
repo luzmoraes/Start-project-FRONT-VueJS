@@ -31,7 +31,8 @@ const actions = {
                 if (res.data.access_token) {
                     setAccessToken(res.data.access_token)
                     setRefreshToken(res.data.refresh_token)
-                    context.dispatch("getCurrentUser");
+                    axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.access_token}`
+                    context.dispatch("getCurrentUser")
                 } else {
                     Nprogress.done()
                     context.commit('loginUserFailure', {message: 'E-mail ou senha inválidos, tente novamente!'})
@@ -53,10 +54,10 @@ const actions = {
                     email: res.data.email,
                     created_at: res.data.created_at
                 }
+                setCurrentUser(user)
                 context.commit('loginUserSuccess', user)
             })
             .catch(err => {
-                // context.commit('loginUserFailure', err);
                 context.commit('loginUserFailure', {message: 'Dados do usuário não pode ser carregado, tente novamente!'});
                 return err
             })
@@ -70,15 +71,12 @@ const mutations = {
     },
     loginUserSuccess(state, user) {
         state.user = user
-        setCurrentUser(user)
         router.push("/dashboard");
-        setTimeout(function(){
-            Vue.notify({
-                group: 'loggedIn',
-                type: 'success',
-                text: 'User Logged In Success!'
-            });
-       },1500);
+        Vue.notify({
+            group: 'loggedIn',
+            type: 'success',
+            text: 'User Logged In Success!'
+        });
     },
     loginUserFailure(state, error) {
         Nprogress.done();
