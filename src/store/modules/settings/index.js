@@ -3,6 +3,7 @@
  */
 import {
 	languages,
+	sidebarBackgroundImages,
 	sidebarFilters,
 	routerAnimations,
 	themes,
@@ -15,7 +16,9 @@ const state = {                                       // dark mode
 	backgroundImage: false,                                // enable sidebar background image
 	horizontalLayoutSidebar: false,                        // horizontal layout sidebar
 	languages,                                             // languages
-	selectedLocale: languages[12],                          // selected locale
+	selectedLocale: languages[0],                          // selected locale
+	sidebarBackgroundImages,                               // sidebar backgorund images
+	selectedSidebarBgImage: sidebarBackgroundImages[0],    // selected sidebar background image
 	sidebarFilters,                                        // sidebar filters
 	sidebarSelectedFilter: sidebarFilters[0],              // selected sidebar filter
 	routerAnimations,                                      // router animations
@@ -46,6 +49,12 @@ const getters = {
 	},
 	languages: state => {
 		return state.languages;
+	},
+	sidebarBackgroundImages: state => {
+		return state.sidebarBackgroundImages;
+	},
+	selectedSidebarBgImage: state => {
+		return state.selectedSidebarBgImage;
 	},
 	sidebarFilters: state => {
 		return state.sidebarFilters;
@@ -143,6 +152,9 @@ const mutations = {
 		} else {
 			state.rtlLayout = false;
 		}
+	},
+	changeBackgroundImageHandler(state, image) {
+		state.selectedSidebarBgImage = image;
 	},
 	changeSidebarFilterHandler(state, filter) {
 		state.sidebarSelectedFilter = filter;

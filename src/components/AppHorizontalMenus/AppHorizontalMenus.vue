@@ -38,7 +38,7 @@
 <script>
 import AppMenuItem from "./AppMenuItem";
 import { mapGetters } from "vuex";
-import MobileSearchForm from "../Header/MobileSearchForm";
+// import MobileSearchForm from "../Header/MobileSearchForm";
 
 export default {
   data() {
@@ -56,7 +56,7 @@ export default {
   },
   components: {
     AppMenuItem,
-     MobileSearchForm
+    //  MobileSearchForm
   },
   computed: {
     ...mapGetters(["menus"])

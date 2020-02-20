@@ -4,7 +4,7 @@
 			<img src="/static/avatars/user-13.jpg" alt="avatar" height="40" width="40" class="img-responsive" />
 		</v-list-item-avatar>
 		<v-list-item-content class="ml-3">
-			<v-list-item-title><span>John Leider</span></v-list-item-title>
+			<v-list-item-title><span>{{ getUser.name }}</span></v-list-item-title>
 		</v-list-item-content>
 		<v-menu 
 			bottom
@@ -22,8 +22,8 @@
 			</template>
 			<div class="dropdown-content">
 				<div class="dropdown-top white--text primary">
-					<span class="white--text fs-14 fw-bold d-block">John Leider</span>
-					<span class="d-block fs-12 fw-normal">info@example.com</span>
+					<span class="white--text fs-14 fw-bold d-block">{{ getUser.name }}</span>
+					<span class="d-block fs-12 fw-normal">{{ getUser.email }}</span>
 				</div>
 				<v-list class="dropdown-list">
 					<template v-for="userLink in userLinks">
@@ -48,10 +48,12 @@
 
 <script>
 import { getCurrentAppLayout } from "Helpers/helpers";
+import { mapGetters } from "vuex";
 
 export default {
 	data() {
 		return {
+			curentUser: null,
 			userLinks: [
 				{
 					id: 1,
@@ -81,11 +83,17 @@ export default {
 	},
 	methods: {
 		logoutUser() {
-			this.$store.dispatch("logoutUserFromFirebase", this.$router);
+			this.$store.dispatch("logoutCurrentUser", this.$router);
 		},
 		getMenuLink(path) {
 			return '/' + getCurrentAppLayout(this.$router) +  path;
 		}
-	}
+	},
+	computed: {
+		...mapGetters([
+			'getUser'
+		])
+	},
+
 };
 </script>

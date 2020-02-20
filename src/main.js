@@ -1,4 +1,5 @@
 // src/main.js
+
 import 'babel-polyfill'
 import Vue from 'vue'
 import App from './App.vue'
@@ -32,13 +33,10 @@ import GlobalComponents from './globalComponents'
 import router from './router'
 
 // store
-import { store } from './store/store'
+import { store } from './store/store';
 
-// constants
-import AppConfig from './constants/AppConfig'
-
-// firebase
-// import './firebase'
+// auth config
+import { AUTH_CONFIG } from './auth/auth-variables';
 
 // include all css files
 import './lib/VuelyCss'
@@ -54,9 +52,9 @@ router.beforeEach((to, from, next) => {
 	if (to.matched.some(record => record.meta.requiresAuth)) {
 		// this route requires auth, check if logged in
 		// if not, redirect to login page.
-		if (localStorage.getItem(AppConfig.userKey) === null) {
+		if (localStorage.getItem(AUTH_CONFIG.userKey) === null) {
 			next({
-				path: '/',
+				path: '/session/login',
 				query: { redirect: to.fullPath }
 			})
 		} else {
@@ -115,10 +113,10 @@ const i18n = new VueI18n({
 
 
 new Vue({
-	store,
+  store,
 	i18n,
 	router,
-	vuetify,
-	render: h => h(App),
+  vuetify,
+  render: h => h(App),
 	components: { App }
 }).$mount('#app')

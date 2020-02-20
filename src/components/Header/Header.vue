@@ -10,6 +10,7 @@
 			mini-variant-width="70"
 			:width="250"
 			class="Vuely-sidebar"
+			:style="{backgroundImage: 'url(' + selectedSidebarBgImage.url + ')'}"
 			:class="{'background-none': !backgroundImage}"
 			:right="rtlLayout"
 		>
@@ -33,45 +34,47 @@
 					</router-link>
 				</div>
 				<quick-links></quick-links>
+				<!--
 				<v-text-field text solo prepend-icon="search" :placeholder="$t('message.search')" class="search-bar"></v-text-field>
 				<div class="mobile-search d-none">
 					<v-btn text icon  small class="mobile-search-btn" @click="toggleSearchForm">
 						<v-icon class="font-md">search</v-icon>
 					</v-btn>
 				</div>
+				-->
 			</div>
 			<div class="navbar-right">
-				<v-btn class="v-step-2 mr-2 upgrade-btn" color="primary" tag="link" @click="sidebarPath('/pages/pricing-1')">{{ $t('message.pricing') }}</v-btn>
+				<!-- <v-btn class="v-step-2 mr-2 upgrade-btn" color="primary" tag="link" @click="sidebarPath('/pages/pricing-1')">{{ $t('message.pricing') }} 2</v-btn> -->
 				<v-btn icon large @click="toggleFullScreen" class="full-screen ma-0">
 					<v-icon color="grey">fullscreen</v-icon>
 				</v-btn>
-				<v-btn class="ma-0" icon large @click.stop="chatSidebar = !chatSidebar">
+				<!-- <v-btn class="ma-0" icon large @click.stop="chatSidebar = !chatSidebar">
 					<v-icon color="grey">forum</v-icon>
-				</v-btn>
+				</v-btn> -->
 				<notifications></notifications>
-				<cart :horizontal="horizontal"></cart>
+				<!-- <cart :horizontal="horizontal"></cart> -->
 				<language-provider></language-provider>
 				<user></user>
 			</div>
 		</v-app-bar>
 		<!-- Chat Searchbar -->
-		<v-navigation-drawer fixed v-model="chatSidebar" :right="!rtlLayout" temporary app class="chat-sidebar-wrap" :width="300">
+		<!-- <v-navigation-drawer fixed v-model="chatSidebar" :right="!rtlLayout" temporary app class="chat-sidebar-wrap" :width="300">
 			<chat-sidebar></chat-sidebar>
 		</v-navigation-drawer>
-		<mobile-search-form></mobile-search-form>
+		<mobile-search-form></mobile-search-form> -->
 	</div>
 </template>
 
 <script>
 import Sidebar from "../Sidebar/Sidebar.vue";
-import ChatSidebar from "../ChatSidebar/ChatSidebar.vue";
+// import ChatSidebar from "../ChatSidebar/ChatSidebar.vue";
 import screenfull from "screenfull";
 import LanguageProvider from "./LanguageProvider";
 import Notifications from "./Notifications";
 import User from "./User";
-import Cart from "./Cart";
+// import Cart from "./Cart";
 import QuickLinks from "./QuickLinks";
-import MobileSearchForm from "./MobileSearchForm";
+// import MobileSearchForm from "./MobileSearchForm";
 import { getCurrentAppLayout } from "Helpers/helpers";
 import { mapGetters } from "vuex";
 
@@ -96,6 +99,7 @@ export default {
 			"rtlLayout",
 			"backgroundImage",
 			"backgroundImage",
+			"selectedSidebarBgImage",
 			"collapseSidebar",
 			"activeHeaderFilter"
 		]),
@@ -128,12 +132,12 @@ export default {
 	},
 	components: {
 		appSidebar: Sidebar,
-		ChatSidebar,
+		// ChatSidebar,
 		LanguageProvider,
 		Notifications,
-		Cart,
+		// Cart,
 		QuickLinks,
-		MobileSearchForm,
+		// MobileSearchForm,
 		User
 	}
 };

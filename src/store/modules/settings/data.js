@@ -8,70 +8,89 @@ import successTheme from "Themes/successTheme";
 // languages
 export const languages = [
    {
+      name: "Português",
+      icon: "br",
+      locale: "br"
+   },
+   {
       name: "English",
       icon: "en",
       locale: "en"
-   },
-   {
-      name: "French",
-      icon: "fr",
-      locale: "fr"
-   },
-   {
-      name: "Hebrew",
-      icon: "he",
-      locale: "he"
-   },
-   {
-      name: "Russian",
-      icon: "ru",
-      locale: "ru"
-   },
-   {
-      name: "Arabic",
-      icon: "ar",
-      locale: "ar"
-   },
-   {
-      name: "Chinese",
-      icon: "cn",
-      locale: "cn"
-   },
-   {
-      name: "German",
-      icon: "ge",
-      locale: "ge"
-   },
-   {
-      name: "Spanish",
-      icon: "es",
-      locale: "sp"
-   },
-   {
-      name: "Japanese",
-      icon: "ja",
-      locale: "ja"
-   },
-   {
-      name: "Korean",
-      icon: "ko",
-      locale: "ko"
-   },
-   {
-      name: "Italian",
-      icon: "it",
-      locale: "it"
-   },
-   {
-      name: "Hungarian",
-      icon: "hu",
-      locale: "hu"
-   },
-   {
-      name: "Português",
-      icon: "pr",
-      locale: "pr"
    }
+   // {
+   //    name: "French",
+   //    icon: "fr",
+   //    locale: "fr"
+   // },
+   // {
+   //    name: "Hebrew",
+   //    icon: "he",
+   //    locale: "he"
+   // },
+   // {
+   //    name: "Russian",
+   //    icon: "ru",
+   //    locale: "ru"
+   // },
+   // {
+   //    name: "Arabic",
+   //    icon: "ar",
+   //    locale: "ar"
+   // },
+   // {
+   //    name: "Chinese",
+   //    icon: "cn",
+   //    locale: "cn"
+   // },
+   // {
+   //    name: "German",
+   //    icon: "ge",
+   //    locale: "ge"
+   // },
+   // {
+   //    name: "Spanish",
+   //    icon: "es",
+   //    locale: "sp"
+   // },
+   // {
+   //    name: "Japanese",
+   //    icon: "ja",
+   //    locale: "ja"
+   // },
+   // {
+   //    name: "Korean",
+   //    icon: "ko",
+   //    locale: "ko"
+   // },
+   // {
+   //    name: "Italian",
+   //    icon: "it",
+   //    locale: "it"
+   // },
+   // {
+   //    name: "Hungarian",
+   //    icon: "hu",
+   //    locale: "hu"
+   // },
+]
+// sidebar background images
+export const sidebarBackgroundImages = [
+   {
+      id: 1,
+      url: '/static/img/sidebar-1.jpg'
+   },
+   {
+      id: 2,
+      url: '/static/img/sidebar-2.jpg'
+   },
+   {
+      id: 3,
+      url: '/static/img/sidebar-3.jpg'
+   },
+   {
+      id: 4,
+      url: '/static/img/sidebar-4.jpg'
+   },
 ]
 
 // sidebar filters

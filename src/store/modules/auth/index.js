@@ -5,20 +5,24 @@ import Vue from 'vue'
 import axios from 'axios'
 import Nprogress from 'nprogress';
 import router from '../../../router';
-import AppConfig from "../../../constants/AppConfig";
+import { AUTH_CONFIG } from '../../../auth/auth-variables';
 import AuthService from "../../../auth/AuthService";
 
 const auth = new AuthService();
-const { setAccessToken, setRefreshToken, setCurrentUser, getCurrentUser } = auth
+const { setAccessToken, setRefreshToken, setCurrentUser, getCurrentUser, getCurrentCompany, clearCredentials } = auth
 
 const state = {
-    user: getCurrentUser()
+    user: getCurrentUser(),
+    company: getCurrentCompany()
 }
 
 // getters
 const getters = {
     getUser: state => {
         return state.user
+    },
+    getCompany: state => {
+        return state.company
     }
 }
 
@@ -26,7 +30,7 @@ const getters = {
 const actions = {
     signinUser(context, payload) {
         context.commit('loginUser')
-        axios.post(`${AppConfig.baseUrl}oauth/token`, payload)
+        axios.post(`${AUTH_CONFIG.baseUrl}oauth/token`, payload)
             .then(res => {
                 if (res.data.access_token) {
                     setAccessToken(res.data.access_token)
@@ -38,14 +42,14 @@ const actions = {
                     context.commit('loginUserFailure', {message: 'E-mail ou senha inválidos, tente novamente!'})
                 }
             })
-            .catch(err => {
-                // context.commit('loginUserFailure', err);
-                context.commit('loginUserFailure', {message: 'E-mail ou senha inválidos, tente novamente!'});
-                return err
-            })
+            .catch(error => {
+                Nprogress.done()
+                context.commit('loginUserFailure', {message: 'E-mail ou senha inválidos, tente novamente!'})
+                return error
+            });
     },
     getCurrentUser(context) {
-        axios.get(`${AppConfig.baseUrl}api/user/me`)
+        axios.get(`${AUTH_CONFIG.baseUrl}api/user/me`)
             .then(res => {
                 Nprogress.done()
                 const user = {
@@ -54,12 +58,26 @@ const actions = {
                     email: res.data.email,
                     created_at: res.data.created_at
                 }
-                setCurrentUser(user)
                 context.commit('loginUserSuccess', user)
             })
             .catch(err => {
                 context.commit('loginUserFailure', {message: 'Dados do usuário não pode ser carregado, tente novamente!'});
                 return err
+            })
+    },
+    logoutCurrentUser(context) {
+        Nprogress.start();
+        axios.get(`${AUTH_CONFIG.baseUrl}api/user/logout`)
+            .then((res) => {
+                Nprogress.done();
+                if (res.data.success) {
+                    context.commit('logoutUser');
+                } else {
+                    context.commit('loginUserFailure', {message: 'Problema ao sair do sistema, tente novamente.'});    
+                }
+            })
+            .catch(error => {
+                context.commit('loginUserFailure', error);
             })
     }
 }
@@ -70,12 +88,13 @@ const mutations = {
         Nprogress.start();
     },
     loginUserSuccess(state, user) {
-        state.user = user
-        router.push("/dashboard");
+        state.user = user;
+        setCurrentUser(user)
+        router.push("/default/dashboard/ecommerce")
         Vue.notify({
             group: 'loggedIn',
             type: 'success',
-            text: 'User Logged In Success!'
+            text: 'Usuário autenticado com sucesso!'
         });
     },
     loginUserFailure(state, error) {
@@ -88,13 +107,8 @@ const mutations = {
     },
     logoutUser(state) {
         state.user = null
-        localStorage.removeItem(AppConfig.userKey);
-        localStorage.removeItem(AppConfig.tokenKey);
-        localStorage.removeItem(AppConfig.refreshTokenKey);
-        router.push("/");
-    },
-    signUpUser() {
-        Nprogress.start();
+        clearCredentials()
+        router.push("/session/login");
     }
 }
 

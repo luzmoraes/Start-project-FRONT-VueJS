@@ -78,6 +78,13 @@
 									</v-list-item-content>
 								</v-list-item>
 							</v-list>
+							<div class="sidebar-images" v-if="backgroundImage">
+								<div class="d-inline-block mx-1 mb-2" v-for="backgroundImage in sidebarBackgroundImages" :key="backgroundImage.id">
+									<a href="javascript:void(0)" class="img-holder" :class="{'active' : selectedSidebarBgImage.id === backgroundImage.id}">
+										<img :src="backgroundImage.url" height="200" width="75" @click="changeBackgroundImage(backgroundImage)" alt="dynamic sidebar images" class="img-responsive">
+									</a>
+								</div>
+							</div>
 						</div>
 					</vue-perfect-scrollbar>
 				</v-tab-item>
@@ -163,6 +170,8 @@ export default {
       "boxLayout",
       "rtlLayout",
       "backgroundImage",
+      "sidebarBackgroundImages",
+      "selectedSidebarBgImage",
       "sidebarFilters",
       "sidebarSelectedFilter",
       "routerAnimations",
