@@ -3,17 +3,13 @@ import Router from 'vue-router'
 
 //routes
 import defaultRoutes from './default';
-import horizontalRoutes from './horizontal';
-import boxedRoutes from './boxed';
-import mini from './mini';
-import boxedV2 from './boxed-v2';
 
-// session components
-const SignUpOne = () => import('Views/session/SignUpOne');
-const LoginOne = () => import('Views/session/LoginOne');
-const LockScreen = () => import('Views/session/LockScreen');
-const ForgotPassword = () => import('Views/session/ForgotPassword');
-const ResetPassword = () => import('Views/session/ResetPassword');
+// authentication components
+const SignUpOne = () => import('Views/authentication/SignUpOne');
+const LoginOne = () => import('Views/authentication/LoginOne');
+const LockScreen = () => import('Views/authentication/LockScreen');
+const ForgotPassword = () => import('Views/authentication/ForgotPassword');
+const ResetPassword = () => import('Views/authentication/ResetPassword');
 
 // const Auth0CallBack = () => import('Components/Auth0Callback/Auth0Callback');
 
@@ -23,16 +19,8 @@ export default new Router({
 	mode: 'history',
 	routes: [
 		defaultRoutes,
-		horizontalRoutes,
-		boxedRoutes,
-		mini,
-		boxedV2,
-		// {
-		// 	path: '/callback',
-		// 	component: Auth0CallBack
-		// },
 		{
-			path: '/session/sign-up',
+			path: '/authentication/sign-up',
 			component: SignUpOne,
 			meta: {
 				title: 'message.signUp',
@@ -40,7 +28,7 @@ export default new Router({
 			}
 		},
 		{
-			path: '/session/login',
+			path: '/authentication/login',
 			component: LoginOne,
 			meta: {
 				title: 'message.login',
@@ -48,7 +36,7 @@ export default new Router({
 			}
 		},
 		{
-			path: '/session/lock-screen',
+			path: '/authentication/lock-screen',
 			component: LockScreen,
 			meta: {
 				title: 'Lock Screen',
@@ -56,7 +44,7 @@ export default new Router({
 			}
 		},
 		{
-			path: '/session/forgot-password',
+			path: '/authentication/forgot-password',
 			component: ForgotPassword,
 			meta: {
 				title: 'message.forgotPassword',
@@ -64,7 +52,7 @@ export default new Router({
 			}
 		},
 		{
-			path: '/session/reset-password',
+			path: '/authentication/reset-password',
 			component: ResetPassword,
 			meta: {
 				title: 'message.resetPassword',

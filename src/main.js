@@ -54,7 +54,7 @@ router.beforeEach((to, from, next) => {
 		// if not, redirect to login page.
 		if (localStorage.getItem(AUTH_CONFIG.userKey) === null) {
 			next({
-				path: '/session/login',
+				path: '/authentication/login',
 				query: { redirect: to.fullPath }
 			})
 		} else {

@@ -38,7 +38,7 @@ export default {
     dialog: 'Dialog',
     grid: 'Grid',
     input: 'Input',
-    list: 'List',
+    list: 'Listar',
     menu: 'Menu',
     progress: 'Progress',
     radio: 'Radio',
@@ -123,7 +123,7 @@ export default {
     currentVisitors: 'Current Visitors',
     newMembers: 'New Members',
     addNewBlog: 'Add New Blog',
-    add: 'Add',
+    add: 'Incluir',
     logOut: 'Sair',
     totalAppMemory: 'Total App Memory',
     totalMemoryUsed: 'Total Memory Used',
@@ -506,7 +506,7 @@ export default {
     taxRates:"Tax Rates",
     addTickets:"Add Tickets",
     projects:"Projects",
-    clients:"Clients",
+    clients:"Clientes",
     reports:"Reports",
     officeManagement:"Office Management",
     hotelManagement:"Hotel Management",
@@ -520,7 +520,7 @@ export default {
     transactionList:"Transaction List",
     transferReport:"Transfer Report",
     expenseCategory:"Expense Category",
-    allClients:"All Clients",
+    allClients:"Todos os Clientes",
     recentlyAdded:"Recently Added",
     favourite:"Favourite",
     tradeHistory:"Trade History",
@@ -583,5 +583,9 @@ export default {
     simpleTable: "Simple Table",
     listItemGroups: "List Item Groups",
     banners: "Banners",
-    appBars: "App Bars"
+    appBars: "App Bars",
+
+    supplier: "Fornecedor",
+    suppliers: "Fornecedores",
+    allSupplier: "Todos os Fornecedores"
   }

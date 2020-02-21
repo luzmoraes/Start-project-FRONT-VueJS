@@ -23,7 +23,7 @@ axios.interceptors.response.use((response) => {
 }, (error) => {
     const originalRequest = error.config
     if (error.response.status === 401 && originalRequest.url === `${AUTH_CONFIG.baseUrl}oauth/token`) {
-        router.push("/session/login")
+        router.push("/authentication/login")
         clearCredentials()
         return Promise.reject(error)
     }
@@ -42,7 +42,7 @@ axios.interceptors.response.use((response) => {
                 }
             })
     } else{
-        router.push("/session/login")
+        router.push("/authentication/login")
         clearCredentials()
         return Promise.reject(error)
     }

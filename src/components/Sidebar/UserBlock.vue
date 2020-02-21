@@ -27,7 +27,7 @@
 				</div>
 				<v-list class="dropdown-list">
 					<template v-for="userLink in userLinks">
-						<template v-if="userLink.id !== 4">						
+						<template v-if="userLink.id !== 3">						
 							<v-list-item :to="getMenuLink(userLink.path)" :key="userLink.id">
 								<i :class="userLink.icon"></i>
 								<span>{{$t(userLink.title)}}</span>
@@ -47,11 +47,12 @@
 </template>
 
 <script>
-import { getCurrentAppLayout } from "Helpers/helpers";
+// import { getCurrentAppLayout } from "Helpers/helpers";
 import { mapGetters } from "vuex";
 
 export default {
 	data() {
+	// console.log(getCurrentAppLayout(this.$router))
 		return {
 			curentUser: null,
 			userLinks: [
@@ -65,16 +66,10 @@ export default {
 					id: 2,
 					title: 'message.inbox',
 					icon: 'ti-email mr-3 success--text',
-					path: '/inbox'
+					path: '/users/inbox'
 				},
 				{
 					id: 3,
-					title: 'message.usersList',
-					icon: 'ti-bell mr-3 info--text',
-					path: '/users/users-list'
-				},
-				{
-					id: 4,
 					title: 'message.logOut',
 					icon: 'ti-power-off mr-3 error--text'
 				}
@@ -86,7 +81,8 @@ export default {
 			this.$store.dispatch("logoutCurrentUser", this.$router);
 		},
 		getMenuLink(path) {
-			return '/' + getCurrentAppLayout(this.$router) +  path;
+			// return '/' + getCurrentAppLayout(this.$router) +  path;
+			return path
 		}
 	},
 	computed: {

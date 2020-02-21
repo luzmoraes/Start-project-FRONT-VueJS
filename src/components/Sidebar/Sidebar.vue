@@ -9,7 +9,7 @@
 				<template v-for="(category, key) in menus">
 					<div :key="key">
 						<div class="sidebar-title px-4">
-							<span>{{$t(key)}}</span>
+							<!-- <span>{{$t(key)}}</span> -->
 						</div>
 						<template v-for="item in category">
 							<template v-if="item.items != null">
@@ -26,7 +26,7 @@
 											<v-list-item-title  v-if="item.items!= null">
 												<i class="mr-3 zmdi" :class="item.action"></i>
 												<span >{{ textTruncate($t(item.title)) }}</span>
-												<template  v-if = "item.label == 'New'">
+												<template  v-if="item.label == 'New'">
 													<span class="sidebar-label">{{item.label}}</span>
 												</template>
 											</v-list-item-title>
@@ -41,6 +41,7 @@
 									<template v-if="subItem !== null">
 										<v-list-item-content>
 											<v-list-item-title>
+												<i class="mr-3 zmdi" :class="subItem.icon" :style="{'font-size': '15px'}"></i>
 												{{ textTruncate($t(subItem.title)) }}
 												<template v-if= "subItem.label == 'New'">
 													<span class="sidebar-label">New</span>

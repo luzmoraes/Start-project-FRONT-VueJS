@@ -583,5 +583,9 @@ export default {
   simpleTable: "Simple Table",
   listItemGroups: "List Item Groups",
   banners: "Banners",
-  appBars: "App Bars"
+  appBars: "App Bars",
+
+  supplier: "Supplier",
+  suppliers: "Suppliers",
+  allSupplier: "All Suppliers"
 }

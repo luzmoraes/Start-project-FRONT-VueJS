@@ -20,9 +20,6 @@ const state = {
 const getters = {
     getUser: state => {
         return state.user
-    },
-    getCompany: state => {
-        return state.company
     }
 }
 
@@ -90,7 +87,7 @@ const mutations = {
     loginUserSuccess(state, user) {
         state.user = user;
         setCurrentUser(user)
-        router.push("/default/dashboard/ecommerce")
+        router.push("/dashboard")
         Vue.notify({
             group: 'loggedIn',
             type: 'success',
@@ -108,7 +105,7 @@ const mutations = {
     logoutUser(state) {
         state.user = null
         clearCredentials()
-        router.push("/session/login");
+        router.push("/authentication/login");
     }
 }
 
