@@ -10,12 +10,12 @@
           <img :src="appLogo" class="img-responsive mb-4" width="78" height="78" />
           <h2 class="mb-4">{{$t('message.resetPassword')}}</h2>
           <p class="fs-14">{{$t('message.pleaseEnterYourPasswordToReset')}}.</p>
-          <p>{{ $route.params.token }}</p>
+          <p v-if="dataUser">Redefinir senha para o email <strong>{{ dataUser.email }}</strong>.</p>
           <v-form
             @submit.prevent="resetPassword"
             id="reset-password-form"
             class="5"
-            v-if="tokenValid"
+            v-if="tokenValid && !passwordReseted"
           >
             <v-text-field
               :label="$t('message.fieldNewPassword')"
@@ -37,7 +37,11 @@
               form="reset-password-form"
             >{{$t('message.resetPassword')}}</v-btn>
           </v-form>
-          <v-alert type="error" v-else>{{ $t('message.tokenResetPasswordExpired') }}</v-alert>
+          <v-alert type="error" v-else-if="!tokenValid && !passwordReseted">{{ $t('message.tokenResetPasswordExpired') }}</v-alert>
+          <div v-else>
+            <v-alert type="success">{{ $t('message.passwordResetedSuccessfull') }}</v-alert>
+            <router-link to="/authentication/login">{{$t('message.backToSignIn')}}</router-link>
+          </div>
         </div>
       </div>
     </div>
@@ -61,6 +65,8 @@ export default {
       confirmPassword: "",
       loader: true,
       tokenValid: false,
+      passwordReseted: false,
+      resetPasswordError: false,
       dataUser: null,
       appLogo: AppConfig.appLogo2
     };
@@ -77,27 +83,51 @@ export default {
       /* eslint-disable */
       this.$http.get(`${AUTH_CONFIG.baseUrl}api/password/find/${this.$route.params.token}`)
         .then(res => {
-		  console.log('RES:', res)
           if (res.status === 200) {
-            this.tokenValid = true;
-            this.dataUser = res.data;
+            this.tokenValid = true
+            this.dataUser = res.data
           }
           this.loader = false;
         })
         .catch(error => {
-          this.loader = false;
+          this.loader = false
         });
       /* eslint-enable */
     },
     resetPassword() {
       this.submitted = true;
+      this.loader = true;
 
       // stop here if form is invalid
       this.$v.$touch();
       if (this.$v.$invalid) {
+        this.loader = false
         return;
       }
-      console.log("Reset Password from token");
+
+      const data = {
+        email: this.dataUser.email,
+        password: this.newPassword,
+        password_confirmation: this.confirmPassword,
+        token: this.dataUser.token
+      }
+
+      /* eslint-disable */
+      this.$http.post(`${AUTH_CONFIG.baseUrl}api/password/reset`, data)
+        .then((res) => {
+          this.submitted = false
+          this.loader = false
+          if (res) {
+            this.dataUser = res.data
+            this.passwordReseted = true
+          }
+        })
+        .catch(err => {
+          this.submitted = false
+          this.loader = false
+          this.tokenValid = false
+        })
+      /* eslint-enable */
     }
   }
 };

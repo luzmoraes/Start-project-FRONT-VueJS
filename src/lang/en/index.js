@@ -595,6 +595,7 @@ export default {
   minCharactersToPass: "Password must be at least 6 characters",
   passwordsMustMatch: "Passwords must match",
   tokenResetPasswordExpired: "The token for resetting the password is invalid or has expired",
+  passwordResetedSuccessfull: "Congratulations, your password has been successfully reset",
 
   fieldPassword: "Password",
   fieldNewPassword: "New password",

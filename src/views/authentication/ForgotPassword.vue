@@ -70,7 +70,8 @@ export default {
       this.$http.post(`${AUTH_CONFIG.baseUrl}api/password/create`, {email: this.email})
         .then((res) => {
           Nprogress.done()
-          console.log('Res:', res.data)
+          this.submitted = false
+          this.sentEmail = true
         })
         .catch(error => {
           Nprogress.done()

@@ -595,6 +595,7 @@ export default {
     minCharactersToPass: "A senha deve ter pelo menos 6 caracteres",
     passwordsMustMatch: "As senhas não correspondem",
     tokenResetPasswordExpired: "O token para redefinir a senha é inválido ou expirou.",
+    passwordResetedSuccessfull: "Parabéns, sua senha foi redefinida com sucesso",
 
     fieldPassword: "Senha",
     fieldNewPassword: "Nova Senha",
