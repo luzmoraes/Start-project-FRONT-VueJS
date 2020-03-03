@@ -19,13 +19,13 @@
           </p>
           <v-form v-model="valid" class="mb-5">
             <v-text-field
-              label="E-mail ID"
+              label="E-mail"
               v-model="email"
               :rules="emailRules"
               required
             ></v-text-field>
             <v-text-field
-              label="Password"
+              label="Senha"
               v-model="password"
               type="password"
               :rules="passwordRules"
@@ -33,7 +33,7 @@
             ></v-text-field>
             <v-checkbox
               color="primary"
-              label="Remember me"
+              label="Lembre-me"
               v-model="checkbox"
             ></v-checkbox>
             <router-link class="mb-2" to="/authentication/forgot-password"
@@ -70,24 +70,24 @@ export default {
       valid: false,
       email: "anderson@ycloud.com.br",
       emailRules: [
-        v => !!v || "E-mail is required",
+        v => !!v || "Informe o email",
         v =>
           /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
-          "E-mail must be valid"
+          "Email inválido"
       ],
       password: "secret",
-      passwordRules: [v => !!v || "Password is required"],
+      passwordRules: [v => !!v || "Informe a senha"],
       appLogo: AppConfig.appLogo2,
       brand: AppConfig.brand,
       authInfo: AUTH_CONFIG.authInfo
     };
   },
   methods: {
-	submit() {
-		this.authInfo.username = this.email
-		this.authInfo.password = this.password
-		this.$store.dispatch("signinUser", this.authInfo);
-	}
+    submit() {
+      this.authInfo.username = this.email
+      this.authInfo.password = this.password
+      this.$store.dispatch("signinUser", this.authInfo);
+    }
   }
 };
 </script>

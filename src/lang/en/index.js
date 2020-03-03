@@ -587,5 +587,17 @@ export default {
 
   supplier: "Supplier",
   suppliers: "Suppliers",
-  allSupplier: "All Suppliers"
+  allSupplier: "All Suppliers",
+  sentEmailSuccessfull: "Sent email successfully",
+  emailNotFound: "Email not found",
+  requiredField: "Required field",
+  invalidEmail: "Invalid email",
+  minCharactersToPass: "Password must be at least 6 characters",
+  passwordsMustMatch: "Passwords must match",
+  tokenResetPasswordExpired: "The token for resetting the password is invalid or has expired",
+
+  fieldPassword: "Password",
+  fieldNewPassword: "New password",
+  fieldConfirmPassword: "Confirm password",
+  fieldEmail: "Email"
 }

@@ -52,7 +52,7 @@ export default new Router({
 			}
 		},
 		{
-			path: '/authentication/reset-password',
+			path: '/authentication/reset-password/:token',
 			component: ResetPassword,
 			meta: {
 				title: 'message.resetPassword',

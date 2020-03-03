@@ -21,7 +21,8 @@ import VueTour from 'vue-tour'
 import fullscreen from 'vue-fullscreen'
 import InstantSearch from 'vue-instantsearch'
 import VueVideoPlayer from 'vue-video-player';
-import Croppa from 'vue-croppa';
+import Croppa from 'vue-croppa'
+import Vuelidate from 'vuelidate'
 
 //import axios global
 import './axios'
@@ -105,6 +106,7 @@ Vue.use(VueGoogleMaps, {
 		key: 'AIzaSyBtdO5k6CRntAMJCF-H5uZjTCoSGX95cdk' // Add your here your google map api key
 	}
 })
+Vue.use(Vuelidate)
 
 const i18n = new VueI18n({
 	locale: store.getters.selectedLocale.locale, // set locale
