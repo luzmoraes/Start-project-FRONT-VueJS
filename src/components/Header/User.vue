@@ -40,22 +40,16 @@
                   id: 1,
                   title: 'message.userProfile',
                   icon: 'ti-user mr-3 primary--text',
-                  path: '/users/user-profile'
+                  path: '/users/profile'
                },
                {
                   id: 2,
                   title: 'message.inbox',
                   icon: 'ti-email mr-3 success--text',
-                  path: '/inbox'
+                  path: '/users/inbox'
                },
                {
                   id: 3,
-                  title: 'message.usersList',
-                  icon: 'ti-bell mr-3 info--text',
-                  path: '/users/users-list'
-               },
-               {
-                  id: 4,
                   title: 'message.logOut',
                   icon: 'ti-power-off mr-3 error--text'
                }

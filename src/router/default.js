@@ -4,8 +4,9 @@ import Full from 'Container/Full'
 const Dashboard = () => import('Views/dashboard/dashboard');
 
 // users views
-const UserProfile = () => import('Views/users/UserProfile');
 const UsersList = () => import('Views/users/UsersList');
+const UserProfile = () => import('Views/users/UserProfile');
+const UserRegister = () => import('Views/users/UserRegister');
 
 export default {
    path: '/',
@@ -23,7 +24,23 @@ export default {
       },
       // users
       {
-         path: '/users/user-profile',
+         path: '/users',
+         component: UsersList,
+         meta: {
+            requiresAuth: true,
+            title: 'message.usersList',
+            breadcrumb: [
+              {
+                breadcrumbInactive: 'Usuários /'
+              },
+              {
+                breadcrumbActive: 'Lista de Usuários'
+              }
+            ]
+         }
+      },
+      {
+         path: '/users/profile',
          component: UserProfile,
          meta: {
             requiresAuth: true,
@@ -39,17 +56,17 @@ export default {
          }
       },
       {
-         path: '/users',
-         component: UsersList,
+         path: '/users/register',
+         component: UserRegister,
          meta: {
             requiresAuth: true,
-            title: 'message.usersList',
-            breadcrumb: [
+            title: 'message.userRegister',
+            breadcrumb:  [
               {
                 breadcrumbInactive: 'Usuários /'
               },
               {
-                breadcrumbActive: 'Lista de Usuários'
+                breadcrumbActive: 'Cadastro',
               }
             ]
          }

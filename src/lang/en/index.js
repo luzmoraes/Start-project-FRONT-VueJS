@@ -70,6 +70,7 @@ export default {
   inbox: 'Inbox',
   users: 'Users',
   userProfile: 'User Profile',
+  userRegister: 'User Register',
   usersList: 'Users List',
   calendar: 'Calendar',
   editor: 'Editor',
@@ -91,6 +92,7 @@ export default {
   basicValidation: 'Basic Validation',
   validationWithSubmitAndclear: 'Validation with submit & clear',
   submit: 'Submit',
+  save: 'Save',
   clear: 'Clear',
   step1: 'Step 1',
   step2: 'Step 2',
@@ -593,12 +595,20 @@ export default {
   requiredField: "Required field",
   invalidEmail: "Invalid email",
   minCharactersToPass: "Password must be at least 6 characters",
+  maxCharactersToinput: "Number of characters allowed exceeded",
+  minCharactersToinput: "The minimum number of characters has not been reached",
   passwordsMustMatch: "Passwords must match",
   tokenResetPasswordExpired: "The token for resetting the password is invalid or has expired",
   passwordResetedSuccessfull: "Congratulations, your password has been successfully reset",
 
+  userSuccessfullyRegistered: "User successfully registered",
+  errorRegistered: "Registration error",
+  errorSaved: "Save error",
+  
   fieldPassword: "Password",
   fieldNewPassword: "New password",
   fieldConfirmPassword: "Confirm password",
-  fieldEmail: "Email"
+  fieldEmail: "Email",
+  fieldUserActive: "User active",
+  fieldName: "Name"
 }

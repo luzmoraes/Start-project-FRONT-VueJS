@@ -60,7 +60,7 @@ export default {
 					id: 1,
 					title: 'message.userProfile',
 					icon: 'ti-user mr-3 primary--text',
-					path: '/users/user-profile'
+					path: '/users/profile'
 				},
 				{
 					id: 2,
