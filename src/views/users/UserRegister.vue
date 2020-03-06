@@ -3,33 +3,37 @@
 		<page-title-bar></page-title-bar>
 		<v-container fluid grid-list-xl py-0>
 			<app-card>
+                <v-alert :type="getIsError ? 'error' : 'success'" v-if="showMessage">
+                    {{ getDynamicMessage }}
+                </v-alert>
 				<v-form
                     @submit.prevent="saveUser"
                     id="user-form"
+                    ref="userform"
                 >
 					<v-text-field
 						:label="$t('message.fieldName')"
 						v-model="user.name"
 						:counter="255"
-                        :error-messages="submitted && $v.user.name.$dirty && $v.user.name.$error && !$v.user.name.required ? $t('message.requiredField') : submitted && $v.user.name.$dirty && $v.user.name.$error && !$v.user.name.maxLength ? $t('message.maxCharactersToinput') : ''"
+                        :error-messages="getSubmitted && $v.user.name.$dirty && $v.user.name.$error && !$v.user.name.required ? $t('message.requiredField') : getSubmitted && $v.user.name.$dirty && $v.user.name.$error && !$v.user.name.maxLength ? $t('message.maxCharactersToinput') : ''"
 					></v-text-field>
 					<v-text-field
 						:label="$t('message.fieldEmail')"
 						v-model="user.email"
                         :counter="255"
-                        :error-messages="submitted && $v.user.email.$dirty && $v.user.email.$error && !$v.user.email.required ? $t('message.requiredField') : submitted && $v.user.email.$dirty && $v.user.email.$error && !$v.user.email.email ? $t('message.invalidEmail') : submitted && $v.user.email.$dirty && $v.user.email.$error && !$v.user.email.maxLength ? $t('message.maxCharactersToinput') : ''"
+                        :error-messages="getSubmitted && $v.user.email.$dirty && $v.user.email.$error && !$v.user.email.required ? $t('message.requiredField') : getSubmitted && $v.user.email.$dirty && $v.user.email.$error && !$v.user.email.email ? $t('message.invalidEmail') : getSubmitted && $v.user.email.$dirty && $v.user.email.$error && !$v.user.email.maxLength ? $t('message.maxCharactersToinput') : ''"
 					></v-text-field>
                     <v-text-field
                         :label="$t('message.fieldPassword')"
                         v-model="user.password"
                         type="password"
-                        :error-messages="submitted && $v.user.password.$dirty && $v.user.password.$error && !$v.user.password.required ? $t('message.requiredField') : submitted && $v.user.password.$dirty && $v.user.password.$error && !$v.user.password.minLength ? $t('message.minCharactersToPass') : ''"
+                        :error-messages="getSubmitted && $v.user.password.$dirty && $v.user.password.$error && !$v.user.password.required ? $t('message.requiredField') : getSubmitted && $v.user.password.$dirty && $v.user.password.$error && !$v.user.password.minLength ? $t('message.minCharactersToPass') : ''"
                     ></v-text-field>
                     <v-text-field
                         :label="$t('message.fieldConfirmPassword')"
                         v-model="user.repassword"
                         type="password"
-                        :error-messages="submitted && $v.user.repassword.$dirty && $v.user.repassword.$error && !$v.user.repassword.required ? $t('message.requiredField') : submitted && $v.user.repassword.$dirty && $v.user.repassword.$error && !$v.user.repassword.semeAsPassword ? $t('message.passwordsMustMatch') : ''"
+                        :error-messages="getSubmitted && $v.user.repassword.$dirty && $v.user.repassword.$error && !$v.user.repassword.required ? $t('message.requiredField') : getSubmitted && $v.user.repassword.$dirty && $v.user.repassword.$error && !$v.user.repassword.semeAsPassword ? $t('message.passwordsMustMatch') : ''"
                     ></v-text-field>
 					<v-checkbox
 						:label="$t('message.fieldUserActive')"
@@ -51,14 +55,14 @@
 </template>
 
 <script>
-import axios from 'axios'
+import Vue from 'vue'
+import Nprogress from 'nprogress';
+import { mapGetters } from 'vuex'
 import { required, email,  maxLength, minLength, sameAs } from "vuelidate/lib/validators";
-import { AUTH_CONFIG } from '../../auth/auth-variables';
 
 export default {
     data() {
         return {
-            submitted: false,
             user: {
                 name: "",
                 email: "",
@@ -67,6 +71,9 @@ export default {
                 active: true
             }
         };
+    },
+    computed: {
+        ...mapGetters(['getSubmitted', 'getIsError', 'getDynamicMessage', 'showMessage'])
     },
     validations: {
         user: {
@@ -77,8 +84,8 @@ export default {
         }
     },
     methods: {
-        saveUser() {
-            this.submitted = true;
+        async saveUser() {
+            this.$store.dispatch('setSubmited', true)
 
             // stop here if form is invalid
             this.$v.$touch();
@@ -86,36 +93,50 @@ export default {
                 return;
             }
 
-            // this.$store.dispatch('insertUser', this.user)
-            //     .then((res) => {
-            //         console.log(res)
-            //     })
-            //     .catch(err => {
-            //         console.log(err)
-            //     })
-
-            console.log('User:::', this.user)
-
-            /* eslint-disable */
-            axios.post(`${AUTH_CONFIG.baseUrl}api/user/insert`, this.user)
-                .then((res) => {
-                    // Nprogress.done();
+            await this.$store.dispatch('insertUser', this.user).then(
+                async (res) => {
+                    this.$store.dispatch('setSubmited', false)
+                    Nprogress.done()
                     if (res.data.success) {
-                        // context.commit('insertUserSuccess', res.data.user)
-                        // return res.data
-                        console.log('res success true:', res)
+                        Vue.notify({
+                            group: 'loggedIn',
+                            type: 'success',
+                            text: this.$t('message.userSuccessfullyRegistered')
+                        });
+                        this.$store.commit('insertUserSuccess', res.data.user)
+                        // this.$refs.userform.reset()
+                        this.user = {
+                            name: "",
+                            email: "",
+                            password: "",
+                            repassword: "",
+                            active: true
+                        }
+
+                    } else if (res.data.error.email) {
+                        Vue.notify({
+                            group: 'loggedIn',
+                            type: 'error',
+                            text: this.$t('message.emailAlreadyRegistered')
+                        });
                     } else {
-                        console.log('res success false:', res)
-                        // return res.data
+                        Vue.notify({
+                            group: 'loggedIn',
+                            type: 'error',
+                            text: this.$t('message.errorRegistered')
+                        });
                     }
-                })
-                .catch(err => {
-                    // Nprogress.done()
-                    console.log('error catch:', err)
-                    // return err
-                    return
-                })
-            /* eslint-enable */
+                },
+                async (err) => {
+                    Vue.notify({
+                        group: 'loggedIn',
+                        type: 'error',
+                        text: this.$t('message.errorRegistered')
+                    });
+                    console.error(err)
+                }
+            )
+
 
             
         }

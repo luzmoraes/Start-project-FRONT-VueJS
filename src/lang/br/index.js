@@ -594,6 +594,7 @@ export default {
     emailNotFound: "Email não encontrado",
     requiredField: "Campo obrigatório",
     invalidEmail: "Email inválido",
+    emailAlreadyRegistered: "Email já cadastrado",
     minCharactersToPass: "A senha deve ter pelo menos 6 caracteres",
     maxCharactersToinput: "Número de caracteres permitido ultrapassado",
     minCharactersToinput: "O número mínimo de caracteres não foi atingido",

@@ -5,7 +5,7 @@ import Vue from 'vue'
 import axios from 'axios'
 import Nprogress from 'nprogress';
 import router from '../../../router';
-import { AUTH_CONFIG } from '../../../auth/auth-variables';
+import { CONFIG } from '../../../common/config';
 import AuthService from "../../../auth/AuthService";
 
 const auth = new AuthService();
@@ -18,16 +18,14 @@ const state = {
 
 // getters
 const getters = {
-    getUser: state => {
-        return state.user
-    }
+    getUser: state => state.user
 }
 
 // actions
 const actions = {
     signinUser(context, payload) {
         context.commit('loginUser')
-        axios.post(`${AUTH_CONFIG.baseUrl}oauth/token`, payload)
+        axios.post(`${CONFIG.baseUrl}oauth/token`, payload)
             .then(res => {
                 if (res.data.access_token) {
                     setAccessToken(res.data.access_token)
@@ -46,7 +44,7 @@ const actions = {
             });
     },
     getCurrentUser(context) {
-        axios.get(`${AUTH_CONFIG.baseUrl}api/user/me`)
+        axios.get(`${CONFIG.baseUrl}api/user/me`)
             .then(res => {
                 Nprogress.done()
                 const user = {
@@ -64,7 +62,7 @@ const actions = {
     },
     logoutCurrentUser(context) {
         Nprogress.start();
-        axios.get(`${AUTH_CONFIG.baseUrl}api/user/logout`)
+        axios.get(`${CONFIG.baseUrl}api/user/logout`)
             .then((res) => {
                 Nprogress.done();
                 if (res.data.success) {

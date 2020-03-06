@@ -1,10 +1,10 @@
 <template>
 	<div>
 		<page-title-bar></page-title-bar>
-    <app-section-loader :status="loader"></app-section-loader>
+    <app-section-loader :status="getLoader"></app-section-loader>
 		<v-container fluid class="grid-list-xl pt-0 mt-n3">
-			<v-row v-if="usersList !== null">
-				<app-card colClasses="col-12 col-sm-6 col-md-4" v-for="(users, index) in usersList" :key="index">
+			<v-row v-if="getUsers !== null">
+				<app-card colClasses="col-12 col-sm-6 col-md-4" v-for="(users, index) in getUsers" :key="index">
 					<!-- <div class="user-image text-sm-center mb-4">
 						<img :src="users.profileImage" class="img-responsive rounded-circle" alt="user images" width="95" height="95" />
 					</div> -->
@@ -13,8 +13,17 @@
 							<h3 class="fw-bold">{{users.name}}</h3>
 							<p>{{ users.email }}</p>
 						</div>
-						<a class="v-btn btn-success white--text ma-0 px-3 py-2 fs-14" href="javascript:void(0);" @click="users.status = !users.status" v-if="users.status">{{$t("message.follow")}}</a>
-						<a class="v-btn btn-danger white--text ma-0 px-3 py-2 fs-14" href="javascript:void(0);" @click="users.status = !users.status" v-else>{{$t("message.unfollow")}}</a>
+						<div class="text-right my-2">
+							<v-btn color="primary" fab class="mr-3" small dark>
+								<v-icon>mdi-eye</v-icon>
+							</v-btn>
+								<v-btn color="warning" class="mr-3" fab small dark>
+							<v-icon>mdi-pencil</v-icon>
+							</v-btn>
+							<v-btn color="red" class="mr-3" fab small dark>
+								<v-icon>mdi-delete</v-icon>
+							</v-btn>
+						</div>
 					</div>
 				</app-card>
 			</v-row>
@@ -23,29 +32,17 @@
 </template>
 
 <script>
-import axios from 'axios'
-import { AUTH_CONFIG } from '../../auth/auth-variables';
+import { mapGetters } from 'vuex'
 
 export default {
-  data() {
-    return {
-      loader: true,
-      usersList: null,
-      connectUsersList: null
-    };
+  computed: {
+    ...mapGetters([
+      'getUsers',
+      'getLoader'
+    ])
   },
-  mounted() {
-    this.loadUsers()
-  },
-  methods: {
-    loadUsers() {
-      axios.get(`${AUTH_CONFIG.baseUrl}api/user/list`)
-        .then(res => {
-            this.loader = false;
-            this.usersList = res.data;
-            this.$store.commit('setUsers', res.data)
-        })
-    }
+  created() {
+    this.$store.dispatch('loadUsers')
   }
 };
 </script>

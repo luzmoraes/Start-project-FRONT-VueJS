@@ -38,7 +38,7 @@ import SessionSliderWidget from "Components/Widgets/SessionSlider";
 import AppConfig from "Constants/AppConfig";
 import { required, email } from "vuelidate/lib/validators";
 import Nprogress from 'nprogress'
-import { AUTH_CONFIG } from '../../auth/auth-variables'
+import ApiService from '../../common/api.service'
 
 export default {
   components: {
@@ -67,7 +67,7 @@ export default {
 
       Nprogress.start()
       /* eslint-disable */
-      this.$http.post(`${AUTH_CONFIG.baseUrl}api/password/create`, {email: this.email})
+      ApiService.post(`api/password/create`, {email: this.email})
         .then((res) => {
           Nprogress.done()
           this.submitted = false

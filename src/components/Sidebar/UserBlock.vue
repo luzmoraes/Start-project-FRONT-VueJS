@@ -54,7 +54,6 @@ export default {
 	data() {
 	// console.log(getCurrentAppLayout(this.$router))
 		return {
-			curentUser: null,
 			userLinks: [
 				{
 					id: 1,

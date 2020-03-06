@@ -58,7 +58,7 @@
 
 import SessionSliderWidget from "Components/Widgets/SessionSlider";
 import AppConfig from "Constants/AppConfig";
-import { AUTH_CONFIG } from "../../auth/auth-variables";
+import { CONFIG } from "../../common/config";
 
 export default {
   components: {
@@ -79,7 +79,7 @@ export default {
       passwordRules: [v => !!v || "Informe a senha"],
       appLogo: AppConfig.appLogo2,
       brand: AppConfig.brand,
-      authInfo: AUTH_CONFIG.authInfo
+      authInfo: CONFIG.authInfo
     };
   },
   methods: {

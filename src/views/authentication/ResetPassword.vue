@@ -52,7 +52,7 @@
 import SessionSliderWidget from "Components/Widgets/SessionSlider";
 import AppConfig from "Constants/AppConfig";
 import { required, minLength, sameAs } from "vuelidate/lib/validators";
-import { AUTH_CONFIG } from "../../auth/auth-variables";
+import ApiService from '../../common/api.service'
 
 export default {
   components: {
@@ -81,7 +81,7 @@ export default {
   methods: {
     checkToken() {
       /* eslint-disable */
-      this.$http.get(`${AUTH_CONFIG.baseUrl}api/password/find/${this.$route.params.token}`)
+      ApiService.get(`api/password/find/${this.$route.params.token}`)
         .then(res => {
           if (res.status === 200) {
             this.tokenValid = true
@@ -113,7 +113,7 @@ export default {
       }
 
       /* eslint-disable */
-      this.$http.post(`${AUTH_CONFIG.baseUrl}api/password/reset`, data)
+      ApiService.post(`api/password/reset`, data)
         .then((res) => {
           this.submitted = false
           this.loader = false

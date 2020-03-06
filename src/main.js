@@ -36,8 +36,8 @@ import router from './router'
 // store
 import { store } from './store/store';
 
-// auth config
-import { AUTH_CONFIG } from './auth/auth-variables';
+// config
+import { CONFIG } from './common/config';
 
 // include all css files
 import './lib/VuelyCss'
@@ -53,7 +53,7 @@ router.beforeEach((to, from, next) => {
 	if (to.matched.some(record => record.meta.requiresAuth)) {
 		// this route requires auth, check if logged in
 		// if not, redirect to login page.
-		if (localStorage.getItem(AUTH_CONFIG.userKey) === null) {
+		if (localStorage.getItem(CONFIG.userKey) === null) {
 			next({
 				path: '/authentication/login',
 				query: { redirect: to.fullPath }

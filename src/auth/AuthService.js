@@ -1,50 +1,50 @@
-import { AUTH_CONFIG } from './auth-variables'
+import { CONFIG } from '../common/config'
 
 class AuthService {
 
   constructor() {}
 
   setAccessToken(token) {
-    localStorage.setItem(AUTH_CONFIG.tokenKey, btoa(JSON.stringify(token)))
+    localStorage.setItem(CONFIG.tokenKey, btoa(JSON.stringify(token)))
   }
 
   setRefreshToken(refreshToken) {
-    localStorage.setItem(AUTH_CONFIG.refreshTokenKey, btoa(JSON.stringify(refreshToken)))
+    localStorage.setItem(CONFIG.refreshTokenKey, btoa(JSON.stringify(refreshToken)))
   }
 
   getAccessToken() {
-    return localStorage.getItem(AUTH_CONFIG.tokenKey)
-      ? JSON.parse(atob(localStorage.getItem(AUTH_CONFIG.tokenKey)))
+    return localStorage.getItem(CONFIG.tokenKey)
+      ? JSON.parse(atob(localStorage.getItem(CONFIG.tokenKey)))
       : null
   }
 
   getRefreshToken() {
-    return localStorage.getItem(AUTH_CONFIG.refreshTokenKey)
-      ? JSON.parse(atob(localStorage.getItem(AUTH_CONFIG.refreshTokenKey)))
+    return localStorage.getItem(CONFIG.refreshTokenKey)
+      ? JSON.parse(atob(localStorage.getItem(CONFIG.refreshTokenKey)))
       : null
   }
   
   setCurrentUser(user) {
-    localStorage.setItem(AUTH_CONFIG.userKey, btoa(JSON.stringify(user)))
+    localStorage.setItem(CONFIG.userKey, btoa(JSON.stringify(user)))
   }
   
   getCurrentUser() {
-    return localStorage.getItem(AUTH_CONFIG.userKey)
-      ? JSON.parse(atob(localStorage.getItem(AUTH_CONFIG.userKey)))
+    return localStorage.getItem(CONFIG.userKey)
+      ? JSON.parse(atob(localStorage.getItem(CONFIG.userKey)))
       : null
   }
 
   getCurrentCompany() {
-    const user = localStorage.getItem(AUTH_CONFIG.userKey)
-      ? JSON.parse(atob(localStorage.getItem(AUTH_CONFIG.userKey)))
+    const user = localStorage.getItem(CONFIG.userKey)
+      ? JSON.parse(atob(localStorage.getItem(CONFIG.userKey)))
       : null
     return user ? user.company : null
   }
 
   clearCredentials() {
-    localStorage.removeItem(AUTH_CONFIG.tokenKey)
-    localStorage.removeItem(AUTH_CONFIG.refreshTokenKey)
-    localStorage.removeItem(AUTH_CONFIG.userKey)
+    localStorage.removeItem(CONFIG.tokenKey)
+    localStorage.removeItem(CONFIG.refreshTokenKey)
+    localStorage.removeItem(CONFIG.userKey)
   }
 }
 

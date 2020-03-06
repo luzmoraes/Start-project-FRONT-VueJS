@@ -1,6 +1,6 @@
 const clientId = 2
 const clientSecret = 'U1qttc28fwAeIxC0yRAspHKdBaR0RP1c8V4Vhoz1'
-export const AUTH_CONFIG = {
+export const CONFIG = {
 	authInfo: {
 		grant_type: "password",
 		client_id: clientId,
@@ -19,5 +19,5 @@ export const AUTH_CONFIG = {
 	userKey: "_currentUser",
 	tokenKey: "_currentToken",
 	refreshTokenKey: "_refreshToken",
-	baseUrl: "http://localhost:8000/"
+	baseUrl: 'http://localhost:8000/'
 }

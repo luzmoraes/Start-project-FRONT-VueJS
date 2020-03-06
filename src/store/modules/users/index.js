@@ -2,10 +2,7 @@
  * Auth Module
  */
 
-import Vue from 'vue'
-// import axios from 'axios'
-// import Nprogress from 'nprogress';
-// import { AUTH_CONFIG } from '../../../auth/auth-variables';
+import ApiService from '../../../common/api.service'
 
 const state = {
     users: []
@@ -20,11 +17,21 @@ const getters = {
 
 // actions
 const actions = {
-    // insertUser(context, payload) {
-    //     Nprogress.start()
-        
-
-    // }
+    loadUsers(context) {
+        context.commit('changeLoader', true)
+        ApiService.get('api/user/list')
+            .then((res) => {
+                context.commit('changeLoader', false)
+                context.commit('setUsers', res.data)
+            })
+            .catch(err => {
+                context.commit('changeLoader', false)
+                console.error(err)
+            })
+    },
+    insertUser(context, payload) {
+        return ApiService.post('api/user/insert', payload)
+    }
 }
 
 // mutations
@@ -34,11 +41,6 @@ const mutations = {
     },
     insertUserSuccess(state, user) {
         state.users.push(user)
-        Vue.notify({
-            group: 'insertUser',
-            type: 'success',
-            text: this.$t('message.userSuccessfullyRegistered')
-        })
     }
 }
 
