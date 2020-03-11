@@ -1,5 +1,5 @@
 const clientId = 2
-const clientSecret = 'U1qttc28fwAeIxC0yRAspHKdBaR0RP1c8V4Vhoz1'
+const clientSecret = '4Lm5FlAZk9esJWhy5p44AnIptQbdNp0Zz3QYvMQE'
 export const CONFIG = {
 	authInfo: {
 		grant_type: "password",

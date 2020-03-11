@@ -70,6 +70,22 @@ export default {
               }
             ]
          }
+      },
+      {
+         path: '/users/register/:id',
+         component: UserRegister,
+         meta: {
+            requiresAuth: true,
+            title: 'message.userRegister',
+            breadcrumb:  [
+              {
+                breadcrumbInactive: 'Usuários /'
+              },
+              {
+                breadcrumbActive: 'Editar',
+              }
+            ]
+         }
       }
    ]
 }

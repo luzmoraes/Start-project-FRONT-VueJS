@@ -17,10 +17,10 @@
 							<v-btn color="primary" fab class="mr-3" small dark>
 								<v-icon>mdi-eye</v-icon>
 							</v-btn>
-								<v-btn color="warning" class="mr-3" fab small dark>
+								<v-btn :to="`/users/register/${users.id}`" color="warning" class="mr-3" fab small dark>
 							<v-icon>mdi-pencil</v-icon>
 							</v-btn>
-							<v-btn color="red" class="mr-3" fab small dark>
+							<v-btn @click="removeUser(users.id)" color="red" class="mr-3" fab small dark>
 								<v-icon>mdi-delete</v-icon>
 							</v-btn>
 						</div>
@@ -35,14 +35,19 @@
 import { mapGetters } from 'vuex'
 
 export default {
-  computed: {
-    ...mapGetters([
-      'getUsers',
-      'getLoader'
-    ])
-  },
-  created() {
-    this.$store.dispatch('loadUsers')
-  }
+	computed: {
+		...mapGetters([
+			'getUsers',
+			'getLoader'
+		])
+	},
+	created() {
+		this.$store.dispatch('loadUsers')
+	},
+	methods: {
+		removeUser(id) {
+			console.log('Remove user id', id)
+		}
+	}
 };
 </script>

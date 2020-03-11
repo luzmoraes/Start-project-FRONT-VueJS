@@ -3,9 +3,6 @@
 		<page-title-bar></page-title-bar>
 		<v-container fluid grid-list-xl py-0>
 			<app-card>
-                <v-alert :type="getIsError ? 'error' : 'success'" v-if="showMessage">
-                    {{ getDynamicMessage }}
-                </v-alert>
 				<v-form
                     @submit.prevent="saveUser"
                     id="user-form"
@@ -73,7 +70,10 @@ export default {
         };
     },
     computed: {
-        ...mapGetters(['getSubmitted', 'getIsError', 'getDynamicMessage', 'showMessage'])
+        ...mapGetters(['getSubmitted', 'getSelectedUser'])
+    },
+    mounted() {
+        this.selectedUser()
     },
     validations: {
         user: {
@@ -139,6 +139,19 @@ export default {
 
 
             
+        },
+        async selectedUser() {
+            if (this.$route.params.id) {
+                console.log('ID:', this.$route.params.id)
+                await this.$store.dispatch('getUserFromId', this.$route.params.id).then(
+                    async (res) => {
+                        console.log(res)
+                    },
+                    async (err) => {
+                        console.error(err)
+                    }
+                )
+            }
         }
     }
 };
