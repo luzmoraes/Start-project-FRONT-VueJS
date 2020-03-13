@@ -32,32 +32,6 @@ const actions = {
                 context.commit('changeLoader', false)
                 console.error(err)
             })
-    },
-    getUserFromId({commit, state}, payload) {
-        const users = [...state.users]
-        if (users.length == 0) {
-            commit('changeLoader', true)
-            ApiService.get('api/user/list')
-                .then((res) => {
-                    commit('changeLoader', false)
-                    commit('setUsers', res.data)
-                    const user = users.filter(user => user.id == payload)
-                    commit('setSelectedUser', user[0])
-                    return user[0]
-                })
-                .catch(err => {
-                    commit('changeLoader', false)
-                    console.error(err)
-                })
-        } else {
-            const user = users.filter(user => user.id == payload)
-            commit('setSelectedUser', user[0])
-            return user[0]
-        }
-
-    },
-    insertUser(context, payload) {
-        return ApiService.post('api/user/insert', payload)
     }
 }
 

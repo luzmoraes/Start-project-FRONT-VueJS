@@ -1,6 +1,7 @@
 <template>
 	<div>
 		<page-title-bar></page-title-bar>
+        <app-section-loader :status="getLoader"></app-section-loader>
 		<v-container fluid grid-list-xl py-0>
 			<app-card>
 				<v-form
@@ -24,12 +25,14 @@
                         :label="$t('message.fieldPassword')"
                         v-model="user.password"
                         type="password"
+                        v-if="!user.id"
                         :error-messages="getSubmitted && $v.user.password.$dirty && $v.user.password.$error && !$v.user.password.required ? $t('message.requiredField') : getSubmitted && $v.user.password.$dirty && $v.user.password.$error && !$v.user.password.minLength ? $t('message.minCharactersToPass') : ''"
                     ></v-text-field>
                     <v-text-field
                         :label="$t('message.fieldConfirmPassword')"
                         v-model="user.repassword"
                         type="password"
+                        v-if="!user.id"
                         :error-messages="getSubmitted && $v.user.repassword.$dirty && $v.user.repassword.$error && !$v.user.repassword.required ? $t('message.requiredField') : getSubmitted && $v.user.repassword.$dirty && $v.user.repassword.$error && !$v.user.repassword.semeAsPassword ? $t('message.passwordsMustMatch') : ''"
                     ></v-text-field>
 					<v-checkbox
@@ -54,8 +57,11 @@
 <script>
 import Vue from 'vue'
 import Nprogress from 'nprogress';
+import router from '../../router'
 import { mapGetters } from 'vuex'
 import { required, email,  maxLength, minLength, sameAs } from "vuelidate/lib/validators";
+import ApiService from '../../common/api.service'
+// import GlobalService from '../../common/global.services'
 
 export default {
     data() {
@@ -70,41 +76,60 @@ export default {
         };
     },
     computed: {
-        ...mapGetters(['getSubmitted', 'getSelectedUser'])
+        ...mapGetters(['getSubmitted', 'getLoader', 'getSelectedUser']),
+        rules() {
+            if (this.getSelectedUser) {
+                return {
+                    name: { required, maxLength: maxLength(255) },
+                    email: { required, email, maxLength: maxLength(255) }
+                }
+            } else {
+                return {
+                    name: { required, maxLength: maxLength(255) },
+                    email: { required, email, maxLength: maxLength(255) },
+                    password: { required, minLength: minLength(6) },
+                    repassword: { required, semeAsPassword: sameAs("password") }
+                }
+            }
+        }
     },
     mounted() {
-        this.selectedUser()
+        this.loadUser()
     },
-    validations: {
-        user: {
-            name: { required, maxLength: maxLength(255) },
-            email: { required, email, maxLength: maxLength(255) },
-            password: { required, minLength: minLength(6) },
-            repassword: { required, semeAsPassword: sameAs("password") },
+    validations() {
+        return {
+            user: this.rules
         }
     },
     methods: {
         async saveUser() {
             this.$store.dispatch('setSubmited', true)
+            Nprogress.start()
 
             // stop here if form is invalid
             this.$v.$touch();
             if (this.$v.$invalid) {
+                Nprogress.done()
                 return;
             }
 
-            await this.$store.dispatch('insertUser', this.user).then(
-                async (res) => {
-                    this.$store.dispatch('setSubmited', false)
+            /* USER UPDATE */
+            if (this.getSelectedUser) {
+                console.log('UPDATE')
+            
+            /* USER INSERT */
+            } else {
+                try {
+                    const response = await ApiService.post('api/user/insert', this.user)
                     Nprogress.done()
-                    if (res.data.success) {
+                    this.$store.dispatch('setSubmited', false)
+                    if (response.data.success) {
                         Vue.notify({
-                            group: 'loggedIn',
+                            group: 'registerUser',
                             type: 'success',
                             text: this.$t('message.userSuccessfullyRegistered')
                         });
-                        this.$store.commit('insertUserSuccess', res.data.user)
-                        // this.$refs.userform.reset()
+                        this.$store.commit('insertUserSuccess', response.data.user)
                         this.user = {
                             name: "",
                             email: "",
@@ -113,44 +138,84 @@ export default {
                             active: true
                         }
 
-                    } else if (res.data.error.email) {
+                    } else if (response.data.error.email) {
                         Vue.notify({
-                            group: 'loggedIn',
+                            group: 'registerUser',
                             type: 'error',
                             text: this.$t('message.emailAlreadyRegistered')
                         });
                     } else {
                         Vue.notify({
-                            group: 'loggedIn',
+                            group: 'registerUser',
                             type: 'error',
                             text: this.$t('message.errorRegistered')
                         });
                     }
-                },
-                async (err) => {
+                } catch (err) {
+                    Nprogress.done()
+                    this.$store.dispatch('setSubmited', false)
                     Vue.notify({
-                        group: 'loggedIn',
+                        group: 'registerUser',
                         type: 'error',
                         text: this.$t('message.errorRegistered')
                     });
                     console.error(err)
                 }
-            )
 
-
-            
+            }
         },
-        async selectedUser() {
+        show() {
+            Vue.notify({
+                group: 'editUser',
+                type: 'error',
+                text: 'hardcode'
+            });
+        },
+        loadUser() {
             if (this.$route.params.id) {
-                console.log('ID:', this.$route.params.id)
-                await this.$store.dispatch('getUserFromId', this.$route.params.id).then(
-                    async (res) => {
-                        console.log(res)
+
+                this.$store.commit('changeLoader', true)
+
+                ApiService.get(`api/user/show/${this.$route.params.id}`).then(
+                    (response) => {
+                        this.$store.commit('changeLoader', false)
+                        if (response.data.success) {
+                            this.user = {
+                                id: response.data.user.id,
+                                name: response.data.user.name,
+                                email: response.data.user.email,
+                                active: response.data.user.active
+                            }
+                            this.$store.commit('setSelectedUser', response.data.user)
+                        } else {
+                            Vue.notify({
+                                group: 'editUser',
+                                type: 'error',
+                                text: this.$t('message.userNotFound')
+                            });
+                            router.push("/users")
+                        }
                     },
-                    async (err) => {
-                        console.error(err)
+                    (err) => {
+                        console.log(err)
+                        Vue.notify({
+                                group: 'editUser',
+                                type: 'error',
+                                text: this.$t('message.unexpectedError')
+                            });
+                        router.push("/users")
                     }
                 )
+
+            } else {
+                this.user = {
+                    name: "",
+                    email: "",
+                    password: "",
+                    repassword: "",
+                    active: true
+                }
+                this.$store.commit('setSelectedUser', null)
             }
         }
     }

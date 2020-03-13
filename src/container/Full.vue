@@ -11,7 +11,7 @@
 			<v-content>
 				<!-- App Router -->
 				<transition name="router-anim" :enter-active-class="`animated ${selectedRouterAnimation}`">
-					<router-view></router-view>
+					<router-view :key="$route.fullPath"></router-view>
 				</transition>
 			</v-content>
 			<!-- app customizer -->

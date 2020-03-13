@@ -603,8 +603,10 @@ export default {
   passwordResetedSuccessfull: "Congratulations, your password has been successfully reset",
 
   userSuccessfullyRegistered: "User successfully registered",
+  userNotFound: "User not found",
   errorRegistered: "Registration error",
   errorSaved: "Save error",
+  unexpectedError: "Unexpected error",
   
   fieldPassword: "Password",
   fieldNewPassword: "New password",

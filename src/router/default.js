@@ -72,7 +72,7 @@ export default {
          }
       },
       {
-         path: '/users/register/:id',
+         path: '/users/edit/:id',
          component: UserRegister,
          meta: {
             requiresAuth: true,

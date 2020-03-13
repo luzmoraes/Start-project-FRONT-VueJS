@@ -8,12 +8,12 @@ const auth = new AuthService();
 const { setAccessToken, setRefreshToken, getAccessToken, getRefreshToken, clearCredentials } = auth
 
 axios.interceptors.request.use(
-    request => {
+    config => {
         const token = getAccessToken()
         if (token) {
-            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+            config.headers.Authorization = `Bearer ${token}`
         }
-        return request
+        return config
     },
     error => Promise.reject(error)
 )
