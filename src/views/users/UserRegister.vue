@@ -55,13 +55,12 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import Nprogress from 'nprogress';
 import router from '../../router'
 import { mapGetters } from 'vuex'
 import { required, email,  maxLength, minLength, sameAs } from "vuelidate/lib/validators";
 import ApiService from '../../common/api.service'
-// import GlobalService from '../../common/global.services'
+import GlobalService from '../../common/global.services'
 
 export default {
     data() {
@@ -115,7 +114,23 @@ export default {
 
             /* USER UPDATE */
             if (this.getSelectedUser) {
-                console.log('UPDATE')
+                try {
+                    const response = await ApiService.put(`api/user/update/${this.user.id}`, this.user)
+                    Nprogress.done()
+                    this.$store.dispatch('setSubmited', false)
+                    if (response.data.success) {
+                        GlobalService.showNotification('global', 'success', this.$t('message.userSuccessfullyRegistered'))
+                        this.$store.commit('updateUserSuccess', response.data.user)
+                        console.log(this.$store.getters.getUsers)
+                    } else {
+                        GlobalService.showNotification('global', 'error', this.$t('message.errorRegistered'))
+                    }
+                } catch (err) {
+                    Nprogress.done()
+                    this.$store.dispatch('setSubmited', false)
+                    GlobalService.showNotification('global', 'error', this.$t('message.errorRegistered'))
+                    console.error(err)
+                }
             
             /* USER INSERT */
             } else {
@@ -124,11 +139,7 @@ export default {
                     Nprogress.done()
                     this.$store.dispatch('setSubmited', false)
                     if (response.data.success) {
-                        Vue.notify({
-                            group: 'registerUser',
-                            type: 'success',
-                            text: this.$t('message.userSuccessfullyRegistered')
-                        });
+                        GlobalService.showNotification('global', 'success', this.$t('message.userSuccessfullyRegistered'))
                         this.$store.commit('insertUserSuccess', response.data.user)
                         this.user = {
                             name: "",
@@ -139,37 +150,18 @@ export default {
                         }
 
                     } else if (response.data.error.email) {
-                        Vue.notify({
-                            group: 'registerUser',
-                            type: 'error',
-                            text: this.$t('message.emailAlreadyRegistered')
-                        });
+                        GlobalService.showNotification('global', 'error', this.$t('message.emailAlreadyRegistered'))
                     } else {
-                        Vue.notify({
-                            group: 'registerUser',
-                            type: 'error',
-                            text: this.$t('message.errorRegistered')
-                        });
+                        GlobalService.showNotification('global', 'error', this.$t('message.errorRegistered'))
                     }
                 } catch (err) {
                     Nprogress.done()
                     this.$store.dispatch('setSubmited', false)
-                    Vue.notify({
-                        group: 'registerUser',
-                        type: 'error',
-                        text: this.$t('message.errorRegistered')
-                    });
+                    GlobalService.showNotification('global', 'error', this.$t('message.errorRegistered'))
                     console.error(err)
                 }
 
             }
-        },
-        show() {
-            Vue.notify({
-                group: 'editUser',
-                type: 'error',
-                text: 'hardcode'
-            });
         },
         loadUser() {
             if (this.$route.params.id) {
@@ -188,21 +180,13 @@ export default {
                             }
                             this.$store.commit('setSelectedUser', response.data.user)
                         } else {
-                            Vue.notify({
-                                group: 'editUser',
-                                type: 'error',
-                                text: this.$t('message.userNotFound')
-                            });
+                            GlobalService.showNotification('global', 'error', this.$t('message.userNotFound'))
                             router.push("/users")
                         }
                     },
                     (err) => {
                         console.log(err)
-                        Vue.notify({
-                                group: 'editUser',
-                                type: 'error',
-                                text: this.$t('message.unexpectedError')
-                            });
+                        GlobalService.showNotification('global', 'error', this.$t('message.unexpectedError'))
                         router.push("/users")
                     }
                 )

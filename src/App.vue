@@ -10,7 +10,7 @@
       <!-- <router-view :auth="auth" :authenticated="authenticated"></router-view> -->
       <router-view></router-view>
       <notifications 
-        group="loggedIn" 
+        group="global" 
         position="top right"
         animation-type="velocity"
       />

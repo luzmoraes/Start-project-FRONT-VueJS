@@ -45,6 +45,11 @@ const mutations = {
     },
     insertUserSuccess(state, user) {
         state.users.push(user)
+    },
+    updateUserSuccess(state, user) {
+        state.users.map(item => {
+            if (item.id === user.id) item = user
+        })
     }
 }
 

@@ -602,11 +602,14 @@ export default {
   tokenResetPasswordExpired: "The token for resetting the password is invalid or has expired",
   passwordResetedSuccessfull: "Congratulations, your password has been successfully reset",
 
+  userAuthenticatedSuccessfully: "User authenticated successfully!",
   userSuccessfullyRegistered: "User successfully registered",
   userNotFound: "User not found",
   errorRegistered: "Registration error",
   errorSaved: "Save error",
   unexpectedError: "Unexpected error",
+  problemExitingTheSystem: 'Problem exiting the system, try again.',
+  userDataCannotBeLoaded: 'User data cannot be loaded, try again!',
   
   fieldPassword: "Password",
   fieldNewPassword: "New password",

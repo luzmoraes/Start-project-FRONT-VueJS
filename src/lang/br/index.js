@@ -602,11 +602,14 @@ export default {
     tokenResetPasswordExpired: "O token para redefinir a senha é inválido ou expirou.",
     passwordResetedSuccessfull: "Parabéns, sua senha foi redefinida com sucesso",
 
+    userAuthenticatedSuccessfully: "Usuário autenticado com sucesso!",
     userSuccessfullyRegistered: "Usuário cadastrado com sucesso",
     userNotFound: "Usuário não encontrado",
     errorRegistered: "Erro ao cadastrar",
     errorSaved: "Erro ao salvar",
     unexpectedError: "Erro inesperado",
+    problemExitingTheSystem: 'Problema ao sair do sistema, tente novamente.',
+    userDataCannotBeLoaded: 'Dados do usuário não pode ser carregado, tente novamente!',
 
     fieldPassword: "Senha",
     fieldNewPassword: "Nova Senha",

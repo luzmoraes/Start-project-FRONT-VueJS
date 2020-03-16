@@ -39,6 +39,7 @@ import AppConfig from "Constants/AppConfig";
 import { required, email } from "vuelidate/lib/validators";
 import Nprogress from 'nprogress'
 import ApiService from '../../common/api.service'
+import GlobalService from '../../common/global.services'
 
 export default {
   components: {
@@ -75,11 +76,7 @@ export default {
         })
         .catch(error => {
           Nprogress.done()
-          this.$notify({
-            group: 'loggedIn',
-            type: 'error',
-            text: this.$t('message.emailNotFound')
-          });
+          GlobalService.showNotification('global', 'error', this.$t('message.emailNotFound'))
         })
       /* eslint-enable */
     }

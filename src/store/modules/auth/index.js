@@ -1,12 +1,12 @@
 /**
  * Auth Module
  */
-import Vue from 'vue'
 import axios from 'axios'
 import Nprogress from 'nprogress';
 import router from '../../../router';
 import { CONFIG } from '../../../common/config';
 import AuthService from "../../../auth/AuthService";
+import GlobalService from '../../../common/global.services'
 
 const auth = new AuthService();
 const { setAccessToken, setRefreshToken, setCurrentUser, getCurrentUser, getCurrentCompany, clearCredentials } = auth
@@ -86,19 +86,11 @@ const mutations = {
         state.user = user;
         setCurrentUser(user)
         router.push("/dashboard")
-        Vue.notify({
-            group: 'loggedIn',
-            type: 'success',
-            text: 'Usuário autenticado com sucesso!'
-        });
+        GlobalService.showNotification('global', 'success', 'Usuário autenticado com sucesso!')
     },
     loginUserFailure(state, error) {
         Nprogress.done();
-        Vue.notify({
-            group: 'loggedIn',
-            type: 'error',
-            text: error.message
-        });
+        GlobalService.showNotification('global', 'error', error.message)
     },
     logoutUser(state) {
         state.user = null
