@@ -121,7 +121,8 @@ export default {
                     if (response.data.success) {
                         GlobalService.showNotification('global', 'success', this.$t('message.userSuccessfullyRegistered'))
                         this.$store.commit('updateUserSuccess', response.data.user)
-                        console.log(this.$store.getters.getUsers)
+                    } else if (response.data.error && response.data.error.email) {
+                        GlobalService.showNotification('global', 'error', this.$t('message.emailAlreadyRegistered'))
                     } else {
                         GlobalService.showNotification('global', 'error', this.$t('message.errorRegistered'))
                     }
@@ -163,33 +164,33 @@ export default {
 
             }
         },
-        loadUser() {
+        async loadUser() {
             if (this.$route.params.id) {
 
                 this.$store.commit('changeLoader', true)
 
-                ApiService.get(`api/user/show/${this.$route.params.id}`).then(
-                    (response) => {
-                        this.$store.commit('changeLoader', false)
-                        if (response.data.success) {
-                            this.user = {
-                                id: response.data.user.id,
-                                name: response.data.user.name,
-                                email: response.data.user.email,
-                                active: response.data.user.active
-                            }
-                            this.$store.commit('setSelectedUser', response.data.user)
-                        } else {
-                            GlobalService.showNotification('global', 'error', this.$t('message.userNotFound'))
-                            router.push("/users")
+                try {
+
+                    const response = await ApiService.get(`api/user/show/${this.$route.params.id}`)
+
+                    this.$store.commit('changeLoader', false)
+                    if (response.data.success) {
+                        this.user = {
+                            id: response.data.user.id,
+                            name: response.data.user.name,
+                            email: response.data.user.email,
+                            active: response.data.user.active
                         }
-                    },
-                    (err) => {
-                        console.log(err)
-                        GlobalService.showNotification('global', 'error', this.$t('message.unexpectedError'))
+                        this.$store.commit('setSelectedUser', response.data.user)
+                    } else {
+                        GlobalService.showNotification('global', 'error', this.$t('message.userNotFound'))
                         router.push("/users")
                     }
-                )
+                } catch (err) {
+                    console.log(err)
+                    GlobalService.showNotification('global', 'error', this.$t('message.unexpectedError'))
+                    router.push("/users")
+                }
 
             } else {
                 this.user = {

@@ -4,7 +4,7 @@
 			<img src="/static/avatars/user-13.jpg" alt="avatar" height="40" width="40" class="img-responsive" />
 		</v-list-item-avatar>
 		<v-list-item-content class="ml-3">
-			<v-list-item-title><span>{{ getUser.name }}</span></v-list-item-title>
+			<v-list-item-title><span>{{ user.name }}</span></v-list-item-title>
 		</v-list-item-content>
 		<v-menu 
 			bottom
@@ -22,8 +22,8 @@
 			</template>
 			<div class="dropdown-content">
 				<div class="dropdown-top white--text primary">
-					<span class="white--text fs-14 fw-bold d-block">{{ getUser.name }}</span>
-					<span class="d-block fs-12 fw-normal">{{ getUser.email }}</span>
+					<span class="white--text fs-14 fw-bold d-block">{{ user.name }}</span>
+					<span class="d-block fs-12 fw-normal">{{ user.email }}</span>
 				</div>
 				<v-list class="dropdown-list">
 					<template v-for="userLink in userLinks">
@@ -54,6 +54,10 @@ export default {
 	data() {
 	// console.log(getCurrentAppLayout(this.$router))
 		return {
+			user: {
+				name: '',
+				email: ''
+			},
 			userLinks: [
 				{
 					id: 1,
@@ -75,6 +79,14 @@ export default {
 			]
 		}
 	},
+	computed: {
+		...mapGetters([
+			'getUser'
+		])
+	},
+	mounted() {
+		this.getUserInfo()
+	},
 	methods: {
 		logoutUser() {
 			this.$store.dispatch("logoutCurrentUser", this.$router);
@@ -82,13 +94,12 @@ export default {
 		getMenuLink(path) {
 			// return '/' + getCurrentAppLayout(this.$router) +  path;
 			return path
+		},
+		getUserInfo() {
+			if (this.getUser) {
+				this.user = this.getUser
+			}
 		}
 	},
-	computed: {
-		...mapGetters([
-			'getUser'
-		])
-	},
-
 };
 </script>

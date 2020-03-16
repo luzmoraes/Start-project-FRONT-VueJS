@@ -603,7 +603,10 @@ export default {
     passwordResetedSuccessfull: "Parabéns, sua senha foi redefinida com sucesso",
 
     userAuthenticatedSuccessfully: "Usuário autenticado com sucesso!",
+    userAuthenticatedError: "E-mail ou senha inválidos, tente novamente",
     userSuccessfullyRegistered: "Usuário cadastrado com sucesso",
+    userSuccessfullyDeleted: "Usuário excluído com sucesso",
+    errorDeletingTheUser: "Erro ao excluir o usuário, tente novamente",
     userNotFound: "Usuário não encontrado",
     errorRegistered: "Erro ao cadastrar",
     errorSaved: "Erro ao salvar",

@@ -1,8 +1,8 @@
 <template>
   <div class="session-wrapper">
-    <div class="session-left">
+    <!-- <div class="session-left">
       <session-slider-widget></session-slider-widget>
-    </div>
+    </div> -->
     <div class="session-right text-center">
       <div class="session-table-cell">
         <div class="session-content">
@@ -55,15 +55,22 @@
 </template>
 
 <script>
+import Nprogress from 'nprogress'
+import router from '../../router'
+// import SessionSliderWidget from "Components/Widgets/SessionSlider"
+import AppConfig from "Constants/AppConfig"
+import { CONFIG } from "../../common/config"
+import ApiService from '../../common/api.service'
+import GlobalService from '../../common/global.services'
+import AuthService from "../../auth/AuthService"
 
-import SessionSliderWidget from "Components/Widgets/SessionSlider";
-import AppConfig from "Constants/AppConfig";
-import { CONFIG } from "../../common/config";
+const auth = new AuthService();
+const { setAccessToken, setRefreshToken } = auth
 
 export default {
-  components: {
-    SessionSliderWidget
-  },
+  // components: {
+  //   SessionSliderWidget
+  // },
   data() {	
     return {
       checkbox: false,
@@ -83,10 +90,35 @@ export default {
     };
   },
   methods: {
-    submit() {
-      this.authInfo.username = this.email
-      this.authInfo.password = this.password
-      this.$store.dispatch("signinUser", this.authInfo);
+    async submit() {
+
+      Nprogress.start()
+
+      try {
+        this.authInfo.username = this.email
+        this.authInfo.password = this.password
+
+        const response = await ApiService.post('oauth/token', this.authInfo)
+
+        if (response.data.access_token) {
+            setAccessToken(response.data.access_token)
+            setRefreshToken(response.data.refresh_token)
+            const user = await ApiService.get('api/user/me')
+            Nprogress.done()
+            this.$store.commit('loginUserSuccess', {
+              id: user.data.id,
+              name: user.data.name,
+              email: user.data.email,
+              created_at: user.data.created_at
+            })
+            router.push("/dashboard")
+            GlobalService.showNotification('global', 'success', this.$t('message.userAuthenticatedSuccessfully'))
+        } else {
+            this.$store.commit('loginUserFailure', {message: this.$t('message.userAuthenticatedError')})
+        }
+      } catch (err) {
+        this.$store.commit('loginUserFailure', {message: this.$t('message.userAuthenticatedError')})
+      }
     }
   }
 };

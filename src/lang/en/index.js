@@ -603,7 +603,10 @@ export default {
   passwordResetedSuccessfull: "Congratulations, your password has been successfully reset",
 
   userAuthenticatedSuccessfully: "User authenticated successfully!",
+  userAuthenticatedError: "Email or password invalid, try again.",
   userSuccessfullyRegistered: "User successfully registered",
+  userSuccessfullyDeleted: "User successfully deleted",
+  errorDeletingTheUser: "Error deleting the user, please try again",
   userNotFound: "User not found",
   errorRegistered: "Registration error",
   errorSaved: "Save error",

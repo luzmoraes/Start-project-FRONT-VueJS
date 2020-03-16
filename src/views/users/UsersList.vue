@@ -18,11 +18,19 @@
               <p>{{ users.email }}</p>
             </div>
             <div class="text-right my-2">
-              <v-btn color="primary" fab class="mr-3" small dark>
+              <v-btn
+                :disabled="getSubmitted"
+                color="primary"
+                fab
+                class="mr-3"
+                small
+                dark
+              >
                 <v-icon>mdi-eye</v-icon>
               </v-btn>
               <v-btn
                 :to="`/users/edit/${users.id}`"
+                :disabled="getSubmitted"
                 color="warning"
                 class="mr-3"
                 fab
@@ -32,7 +40,8 @@
                 <v-icon>mdi-pencil</v-icon>
               </v-btn>
               <v-btn
-                @click="removeUser(users.id)"
+                @click="removeUser(users)"
+                :disabled="getSubmitted"
                 color="red"
                 class="mr-3"
                 fab
@@ -46,22 +55,48 @@
         </app-card>
       </v-row>
     </v-container>
+    <Confirm ref="confirm"></Confirm>
   </div>
+  
 </template>
 
 <script>
+import Nprogress from 'nprogress';
 import { mapGetters } from "vuex";
+import Confirm from '../../components/DialogConfirm/Confirm'
+import ApiService from '../../common/api.service';
+import GlobalService from '../../common/global.services';
 
 export default {
+  components: {
+    Confirm
+  },
   computed: {
-    ...mapGetters(["getUsers", "getLoader"])
+    ...mapGetters(["getUsers", "getLoader", "getSubmitted"])
   },
   created() {
     this.$store.dispatch("loadUsers");
   },
   methods: {
-    removeUser(id) {
-      console.log("Remove user id", id);
+    async removeUser(user) {
+      this.$store.commit('changeSubmitted', true)
+      Nprogress.start()
+      if (await this.$refs.confirm.open('Atenção', `Deseja excluir o usuário <strong>${user.name}</strong>?`, { color: 'red' })) {
+        const response = await ApiService.get(`api/user/delete/${user.id}`)
+        this.$store.commit('changeSubmitted', false)
+        Nprogress.done()
+        if (response.data.success) {
+          let users = this.getUsers.filter(u => u.id != user.id)
+          this.$store.commit('setUsers', users)
+          GlobalService.showNotification('global', 'success', this.$t('message.userSuccessfullyDeleted'))
+        } else {
+          GlobalService.showNotification('global', 'error', this.$t('message.errorDeletingTheUser'))
+        }
+      }
+      else {
+        this.$store.commit('changeSubmitted', false)
+        Nprogress.done()
+      }
     }
   }
 };
