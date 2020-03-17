@@ -1,9 +1,9 @@
 <template>
   <div class="session-wrapper">
-    <div class="session-left">
+    <!-- <div class="session-left">
       <session-slider-widget></session-slider-widget>
-    </div>
-    <div class="session-right text-center">
+    </div> -->
+    <div class="session-right text-center ml-0">
       <app-section-loader :status="loader"></app-section-loader>
       <div class="session-table-cell" v-if="!loader">
         <div class="session-content">
@@ -49,14 +49,14 @@
 </template>
 
 <script>
-import SessionSliderWidget from "Components/Widgets/SessionSlider";
+// import SessionSliderWidget from "Components/Widgets/SessionSlider";
 import AppConfig from "Constants/AppConfig";
 import { required, minLength, sameAs } from "vuelidate/lib/validators";
 import ApiService from '../../common/api.service'
 
 export default {
   components: {
-    SessionSliderWidget
+    // SessionSliderWidget
   },
   data() {
     return {

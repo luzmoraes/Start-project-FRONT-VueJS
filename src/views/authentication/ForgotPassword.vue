@@ -1,9 +1,9 @@
 <template>
   <div class="session-wrapper">
-    <div class="session-left">
+    <!-- <div class="session-left">
       <session-slider-widget></session-slider-widget>
-    </div>
-    <div class="session-right text-center">
+    </div> -->
+    <div class="session-right text-center ml-0">
       <div class="session-table-cell">
         <div class="session-content">
           <img :src="appLogo" class="img-responsive mb-4" width="78" height="78" />
@@ -34,7 +34,7 @@
 
 
 <script>
-import SessionSliderWidget from "Components/Widgets/SessionSlider";
+// import SessionSliderWidget from "Components/Widgets/SessionSlider";
 import AppConfig from "Constants/AppConfig";
 import { required, email } from "vuelidate/lib/validators";
 import Nprogress from 'nprogress'
@@ -43,7 +43,7 @@ import GlobalService from '../../common/global.services'
 
 export default {
   components: {
-    SessionSliderWidget
+    // SessionSliderWidget
   },
   data() {
     return {

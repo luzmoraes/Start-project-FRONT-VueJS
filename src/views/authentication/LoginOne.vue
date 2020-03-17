@@ -3,7 +3,7 @@
     <!-- <div class="session-left">
       <session-slider-widget></session-slider-widget>
     </div> -->
-    <div class="session-right text-center">
+    <div class="session-right text-center ml-0">
       <div class="session-table-cell">
         <div class="session-content">
           <img
